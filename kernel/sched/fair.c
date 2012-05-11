@@ -5639,7 +5639,7 @@ static void nohz_idle_balance(int this_cpu, enum cpu_idle_type idle)
 		rq = cpu_rq(balance_cpu);
 		raw_spin_lock_irq(&this_rq->lock);
 		update_rq_clock(this_rq);
-		update_cpu_load(this_rq);
+		update_idle_cpu_load(this_rq);
 		raw_spin_unlock_irq(&this_rq->lock);
 
 		/*
