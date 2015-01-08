@@ -686,18 +686,13 @@ static int msm_compr_configure_dsp(struct snd_compr_stream *cstream)
 		.step = SOFT_VOLUME_STEP,
 		.rampingcurve = SOFT_VOLUME_CURVE_LINEAR,
 	};
+	if (prtd->codec_param.codec.format == SNDRV_PCM_FORMAT_S24_LE)
+		bits_per_sample = 24;
+	else if (prtd->codec_param.codec.format == SNDRV_PCM_FORMAT_S32_LE)
+		bits_per_sample = 32;
 
-	pr_debug("%s: stream_id %d\n", __func__, ac->stream_id);
-#ifdef VENDOR_EDIT
-     //guoguangyi@mutimedia.2016.04.23,
-    //use 24bits to get rid of 16bits innate noise
-    //mark by globale value to open adm 24bits
-    //lifei modified in 20160430
-    if (prtd->codec_param.codec.bit_rate == 24) {
-        bits_per_sample = 24;
-        gis_24bits = 1;
-    }
-#endif
+	pr_debug("%s: stream_id %d bits_per_sample %d\n",
+			__func__, ac->stream_id, bits_per_sample);
 	ret = q6asm_stream_open_write_v2(ac,
 				prtd->codec, bits_per_sample,
 				ac->stream_id,
@@ -1154,18 +1149,7 @@ static int msm_compr_trigger(struct snd_compr_stream *cstream, int cmd)
 	unsigned long flags;
 	int stream_id;
 	uint32_t stream_index;
-#ifdef VENDOR_EDIT
-     //guoguangyi@mutimedia.2016.04.23,
-    //use 24bits to get rid of 16bits innate noise
-    //mark by globale value to open adm 24bits
-    //lifei modified in 20160430
-    uint16_t bits_per_sample = 16;
-    if (prtd->codec_param.codec.bit_rate == 24) {
-        bits_per_sample = 24;
-    }
-#else
-    uint16_t bits_per_sample = 16;
-#endif
+	uint16_t bits_per_sample = 16;
 
 	if (cstream->direction != SND_COMPRESS_PLAYBACK) {
 		pr_err("%s: Unsupported stream type\n", __func__);
@@ -1530,9 +1514,17 @@ static int msm_compr_trigger(struct snd_compr_stream *cstream, int cmd)
 			}
 			break;
 		}
-		pr_debug("%s: open_write stream_id %d", __func__, stream_id);
+
+		if (prtd->codec_param.codec.format == SNDRV_PCM_FORMAT_S24_LE)
+			bits_per_sample = 24;
+		else if (prtd->codec_param.codec.format ==
+			 SNDRV_PCM_FORMAT_S32_LE)
+			bits_per_sample = 32;
+
+		pr_debug("%s: open_write stream_id %d bits_per_sample %d",
+				__func__, stream_id, bits_per_sample);
 		rc = q6asm_stream_open_write_v2(prtd->audio_client,
-				prtd->codec, 16,
+				prtd->codec, bits_per_sample,
 				stream_id,
 				prtd->gapless_state.use_dsp_gapless_mode);
 		if (rc < 0) {
