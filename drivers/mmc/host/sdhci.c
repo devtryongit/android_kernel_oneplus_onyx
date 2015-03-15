@@ -1583,7 +1583,7 @@ static int sdhci_get_tuning_cmd(struct sdhci_host *host)
 		return MMC_SEND_TUNING_BLOCK;
 }
 
-void sdhci_cfg_irq(struct sdhci_host *host, bool enable, bool sync)
+static void sdhci_cfg_irq(struct sdhci_host *host, bool enable, bool sync)
 {
 	if (enable && !host->irq_enabled) {
 		enable_irq(host->irq);
@@ -1598,11 +1598,25 @@ void sdhci_cfg_irq(struct sdhci_host *host, bool enable, bool sync)
 }
 EXPORT_SYMBOL(sdhci_cfg_irq);
 
+#define SDHCI_SPIN_LOCK(host, enable)					\
+	do {								\
+		if (enable) {						\
+			sdhci_cfg_irq(host, !enable, true);		\
+			if (host->ops->cfg_power_irq)			\
+				host->ops->cfg_power_irq(host, !enable);\
+			spin_lock(&host->lock);				\
+		} else {						\
+			spin_unlock(&host->lock);			\
+			sdhci_cfg_irq(host, !enable, true);		\
+			if (host->ops->cfg_power_irq)			\
+				host->ops->cfg_power_irq(host, !enable);\
+		}							\
+	} while (0)
+
 static void sdhci_request(struct mmc_host *mmc, struct mmc_request *mrq)
 {
 	struct sdhci_host *host;
 	bool present;
-	unsigned long flags;
 	u32 tuning_opcode;
 
 	host = mmc_priv(mmc);
@@ -1619,7 +1633,25 @@ static void sdhci_request(struct mmc_host *mmc, struct mmc_request *mrq)
 		return;
 	}
 
-	spin_lock_irqsave(&host->lock, flags);
+	/*
+	 * Firstly check card presence from cd-gpio.  The return could
+	 * be one of the following possibilities:
+	 *     negative: cd-gpio is not available
+	 *     zero: cd-gpio is used, and card is removed
+	 *     one: cd-gpio is used, and card is present
+	 */
+	if (present < 0) {
+		/* If polling, assume that the card is always present. */
+		if (host->quirks & SDHCI_QUIRK_BROKEN_CARD_DETECTION)
+			present = 1;
+		else
+			present = sdhci_readl(host, SDHCI_PRESENT_STATE) &
+					SDHCI_CARD_PRESENT;
+	}
+
+	present = mmc_gpio_get_cd(host->mmc);
+
+	SDHCI_SPIN_LOCK(host, true);
 
 	WARN_ON(host->mrq != NULL);
 
@@ -1672,9 +1704,9 @@ static void sdhci_request(struct mmc_host *mmc, struct mmc_request *mrq)
 					MMC_SEND_TUNING_BLOCK;
 				host->mrq = NULL;
 				host->flags &= ~SDHCI_NEEDS_RETUNING;
-				spin_unlock_irqrestore(&host->lock, flags);
+				SDHCI_SPIN_LOCK(host, false);
 				sdhci_execute_tuning(mmc, tuning_opcode);
-				spin_lock_irqsave(&host->lock, flags);
+				SDHCI_SPIN_LOCK(host, true);
 
 				/* Restore original mmc_request structure */
 				host->mrq = mrq;
@@ -1697,7 +1729,7 @@ static void sdhci_request(struct mmc_host *mmc, struct mmc_request *mrq)
 	}
 
 	mmiowb();
-	spin_unlock_irqrestore(&host->lock, flags);
+	SDHCI_SPIN_LOCK(host, false);
 }
 
 static void sdhci_cfg_async_intr(struct sdhci_host *host, bool enable)
