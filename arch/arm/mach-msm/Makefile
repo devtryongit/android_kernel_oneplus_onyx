@@ -439,3 +439,4 @@ obj-$(CONFIG_OEM_PROJECT_INFO) += project_info.o
 
 obj-$(CONFIG_CHARGE_LEVEL) += charge_level.o
 obj-$(CONFIG_ZEN_DECISION) += msm_zen_decision.o
+obj-$(CONFIG_MSM_LIMITER) += msm_limiter.o
