@@ -3084,7 +3084,14 @@ config PVS_LEVEL_INTERFACE
 	default y
 	help
 	 Allow PVS level to be shown in kernel tuning apps
-	 
+
+config MSM_LIMITER
+	bool "MSM Frequency Limiter Driver"
+	default y
+	help
+	  The MSM Frequency Limiter Driver controls max frequency limit for each CPU
+	  to desired value on suspend/resume
+
 endif
 
 config KERNEL_TEXT_MPU_PROT
