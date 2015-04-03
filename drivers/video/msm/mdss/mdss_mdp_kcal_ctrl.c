@@ -150,6 +150,9 @@ static uint32_t igc_rgb[IGC_LUT_ENTRIES] = {
 
 static bool mdss_mdp_kcal_is_panel_on(void)
 {
+	return true;
+
+#if 0
 	int i;
 	struct mdss_mdp_ctl *ctl;
 	struct mdss_data_type *mdata = mdss_mdp_get_mdata();
@@ -161,6 +164,7 @@ static bool mdss_mdp_kcal_is_panel_on(void)
 	}
 
 	return false;
+#endif
 }
 
 static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
