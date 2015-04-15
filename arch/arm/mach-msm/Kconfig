@@ -3078,7 +3078,13 @@ config MSM_CPU_VOLTAGE_CONTROL
 	default y
 	help
 	  This enables userspace CPU Voltage Control.
-
+	 
+config PVS_LEVEL_INTERFACE
+	bool "Expose PVS level information in sysfs"
+	default y
+	help
+	 Allow PVS level to be shown in kernel tuning apps
+	 
 endif
 
 config KERNEL_TEXT_MPU_PROT
