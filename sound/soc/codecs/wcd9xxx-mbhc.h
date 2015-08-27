@@ -391,6 +391,8 @@ struct wcd9xxx_mbhc {
 #endif
 
 	struct mutex mbhc_lock;
+        
+        bool force_linein;
 
 #ifdef CONFIG_MACH_MSM8974_15055
 	struct switch_dev wcd9xxx_sdev;
