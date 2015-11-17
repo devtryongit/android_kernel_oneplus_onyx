@@ -280,8 +280,15 @@ config ARCH_MSM8974
 	select ARM_HAS_SG_CHAIN
 	select MSM_RUN_QUEUE_STATS
 	select MEMORY_HOLE_CARVEOUT
+<<<<<<< HEAD
 	select QMI_ENCDEC
 	select MSM_ULTRASOUND_B
+=======
+	#select MSM_RPM_STATS_LOG
+	select QMI_ENCDEC
+	select MSM_ULTRASOUND_B
+	#select MSM_RPM_LOG
+>>>>>>> 75fa811... arm: disable some tracing and debug
 	select ARCH_WANT_KMAP_ATOMIC_FLUSH
 	select KRAIT_REGULATOR
 	select ENABLE_VMALLOC_SAVINGS
@@ -416,6 +423,11 @@ config ARCH_MSM9625
 	select CPU_FREQ_MSM
 	select MSM_MULTIMEDIA_USE_ION
 	#select MSM_RPM_STATS_LOG
+<<<<<<< HEAD
+=======
+	select PM_DEVFREQ
+	select MSM_DEVFREQ_DEVBW
+>>>>>>> 75fa811... arm: disable some tracing and debug
 	select MSM_QDSP6_APRV2
 	select MSM_QDSP6V2_CODECS
 	select MSM_AUDIO_QDSP6V2 if SND_SOC
