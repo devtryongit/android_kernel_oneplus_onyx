@@ -437,3 +437,4 @@ obj-$(CONFIG_OEM_PROJECT_INFO) += project_info.o
 #endif /* VENDOR_EDIT */
 
 obj-$(CONFIG_CHARGE_LEVEL) += charge_level.o
+obj-$(CONFIG_ZEN_DECISION) += msm_zen_decision.o
