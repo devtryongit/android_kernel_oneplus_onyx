@@ -26,12 +26,17 @@
 			qcom,default-state = "off";
 			qcom,id = <3>;
 <<<<<<< HEAD
+<<<<<<< HEAD
 			qcom,duty-pcts = [00 0B 16 21 2C 37 42 4D 58 64];
 			qcom,lut-flags = <31>; /* loop, ramp up, reverse, pause hi, pause lo */
 =======
 			qcom,duty-pcts = [00 19 32 4B 64 64 4B 32 19 00];
 			qcom,lut-flags = <19>;
 >>>>>>> 96e7ac2... ARM: dts: 15055: Fix multi-color breathing LED & LEDs error on init
+=======
+			qcom,duty-pcts = [00 0B 16 21 2C 37 42 4D 58 64];
+			qcom,lut-flags = <31>; /* loop, ramp up, reverse, pause hi, pause lo */
+>>>>>>> 948f6d0... ARM: dts: 15055: Update RGB LED settings
 			qcom,pause-hi = <0>;
 			qcom,pause-lo = <0>;
 			qcom,ramp-step-ms = <100>;
@@ -50,6 +55,7 @@
 			qcom,default-state = "off";
 			qcom,id = <4>;
 <<<<<<< HEAD
+<<<<<<< HEAD
 			qcom,duty-pcts = [00 0B 16 21 2C 37 42 4D 58 64];
 			qcom,lut-flags = <31>; /* loop, ramp up, reverse, pause hi, pause lo */
 			qcom,pause-hi = <0>;
@@ -64,6 +70,14 @@
 			qcom,ramp-step-ms = <100>;
 			qcom,start-idx = <21>;
 >>>>>>> 96e7ac2... ARM: dts: 15055: Fix multi-color breathing LED & LEDs error on init
+=======
+			qcom,duty-pcts = [00 0B 16 21 2C 37 42 4D 58 64];
+			qcom,lut-flags = <31>; /* loop, ramp up, reverse, pause hi, pause lo */
+			qcom,pause-hi = <0>;
+			qcom,pause-lo = <0>;
+			qcom,ramp-step-ms = <100>;
+			qcom,start-idx = <10>;
+>>>>>>> 948f6d0... ARM: dts: 15055: Update RGB LED settings
 			qcom,turn-off-delay-ms = <500>;
 			qcom,use-blink;
 		};
@@ -76,6 +90,7 @@
 			qcom,pwm-us = <1000>;
 			qcom,max-current = <12>;
 			qcom,id = <5>;
+<<<<<<< HEAD
 <<<<<<< HEAD
 			qcom,duty-pcts = [00 0B 16 21 2C 37 42 4D 58 64];
 			qcom,lut-flags = <31>; /* loop, ramp up, reverse, pause hi, pause lo */
@@ -91,6 +106,14 @@
 			qcom,ramp-step-ms = <100>;
 			qcom,start-idx = <42>;
 >>>>>>> 96e7ac2... ARM: dts: 15055: Fix multi-color breathing LED & LEDs error on init
+=======
+			qcom,duty-pcts = [00 0B 16 21 2C 37 42 4D 58 64];
+			qcom,lut-flags = <31>; /* loop, ramp up, reverse, pause hi, pause lo */
+			qcom,pause-hi = <0>;
+			qcom,pause-lo = <0>;
+			qcom,ramp-step-ms = <100>;
+			qcom,start-idx = <20>;
+>>>>>>> 948f6d0... ARM: dts: 15055: Update RGB LED settings
 			qcom,turn-off-delay-ms = <500>;
 			qcom,use-blink;
 		};
