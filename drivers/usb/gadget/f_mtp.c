@@ -566,6 +566,9 @@ static ssize_t mtp_read(struct file *fp, char __user *buf,
 	if (!dev->ep_out)
 		return -EINVAL;
 
+	if (!dev->ep_out)
+		return -EINVAL;
+
 	len = ALIGN(count, dev->ep_out->maxpacket);
 
 	if (len > mtp_rx_req_len)
@@ -655,6 +658,9 @@ static ssize_t mtp_write(struct file *fp, const char __user *buf,
 	int ret;
 
 	DBG(cdev, "mtp_write(%d)\n", count);
+
+	if (!dev->ep_in)
+		return -EINVAL;
 
 	if (!dev->ep_in)
 		return -EINVAL;
