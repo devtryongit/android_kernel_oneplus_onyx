@@ -1300,6 +1300,7 @@
 	qcom,vibrator@c000 {
 		compatible = "qcom,qpnp-vibrator";
 		reg = <0xc000 0x100>;
+<<<<<<< HEAD
 /* OEM taokai 2016-05-13 add begin for vibrator*/
 		qcom,vib-timeout-ms = <15000>;
 		qcom,vib-vtg-level-mV = <3100>;
@@ -1309,6 +1310,12 @@
 	//	status = "disabled";
 		status = "okay";
 /* OEM taokai 2016-05-13 modify end for vibrator*/		
+=======
+		qcom,vib-timeout-ms = <15000>;
+		qcom,vib-vtg-level-mV = <3100>;
+		qcom,vib-vtg-min-mV = <1900>;
+		status = "okay";
+>>>>>>> d9b87b6... ARM: dts: 15055: pm8941: Add minimum voltage entry and cleanup
 	};
 
 	qcom,leds@d000 {
