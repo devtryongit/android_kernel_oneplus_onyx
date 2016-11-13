@@ -330,15 +330,14 @@ static void do_afsync_work(struct work_struct *work)
 static int do_fsync(unsigned int fd, int datasync)
 {
 	struct file *file;
+#ifdef CONFIG_ASYNC_FSYNC
+	struct fsync_work *fwork;
+#endif
 	int ret = -EBADF;
 	int fput_needed;
 
 	if (!fsync_enabled)
 		return 0;
-
-#ifdef CONFIG_ASYNC_FSYNC
-	struct fsync_work *fwork;
-#endif
 
 	file = fget_light(fd, &fput_needed);
 
