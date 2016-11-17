@@ -22,8 +22,3 @@ struct msm_sps_platform_data {
 };
 
 #endif /* _MSM_SPS_H_ */
-
-&sdhc_1 {
-	qcom,pad-pull-on = <0x0 0x3 0x3 0x1>; /* no-pull, pull-up, pull-up, pull-down */
-	qcom,pad-pull-off = <0x0 0x3 0x3 0x1>; /* no-pull, pull-up, pull-up, pull-down */
-};
