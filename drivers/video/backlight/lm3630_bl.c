@@ -31,6 +31,7 @@
 #ifdef CONFIG_MACH_MSM8974_15055
 #include <linux/boot_mode.h>
 #include <linux/project_info.h>
+#endif //CONFIG_MACH_MSM8974_15055 
 
 #ifdef CONFIG_FB_MSM_MDSS
 #include <linux/lcd_notify.h>
