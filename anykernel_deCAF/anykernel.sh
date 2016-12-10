@@ -165,6 +165,9 @@ chmod -R 766 $initd
 # remove mpdecsion binary
 mv $bindir/mpdecision $bindir/mpdecision-rm
 
+# remove qcom thermal engine
+mv $bindir/thermal-engine $bindir/thermal-engine-rm
+
 # xPrivacy
 # Thanks to @Shadowghoster & @@laufersteppenwolf
 param=$(grep "xprivacy" service_contexts)
