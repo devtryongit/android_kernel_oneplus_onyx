@@ -573,6 +573,16 @@ static ssize_t mdss_get_rgb(struct device *dev,
  * reference chart:
  * http://www.vendian.org/mncharity/dir3/blackbody/UnstableURLs/bbr_color.html
  */
+static ssize_t mdss_get_rgb(struct device *dev,
+	struct device_attribute *attr, char *buf)
+{
+	struct kcal_lut_data lut_data = kcal_ext_show_values();
+
+	return sprintf(buf, "%d %d %d\n", lut_data.red * 128,
+						 lut_data.green * 128,
+						 lut_data.blue * 128);
+}
+
 static ssize_t mdss_set_rgb(struct device *dev,
 	struct device_attribute *attr,
 	const char *buf, size_t count)
@@ -614,7 +624,9 @@ static ssize_t mdss_set_rgb(struct device *dev,
 		return count;
 	}
 
-	return -EINVAL;
+	kcal_ext_apply_values(r, g, b);
+
+	return count;
 }
 
 static DEVICE_ATTR(msm_fb_type, S_IRUGO, mdss_fb_get_type, NULL);
