@@ -135,5 +135,3 @@ obj-$(CONFIG_YAFFS_FS)		+= yaffs2/
 #Zhilong.Zhang@OnlineRd.Driver, 2014/02/26, Add for exfat filesystem
 obj-$(CONFIG_EXFAT_FS)		+= exfat/
 #endif /*CONFIG_MACH_MSM8974_15055*/
-
-obj-$(CONFIG_DYNAMIC_FSYNC)	+= dyn_sync_cntrl.o
