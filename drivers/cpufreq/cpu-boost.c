@@ -38,6 +38,7 @@ struct cpu_sync {
 	int src_cpu;
 	unsigned int boost_min;
 	unsigned int input_boost_min;
+	unsigned int task_load;
 	unsigned int input_boost_freq;
 };
 
@@ -58,8 +59,23 @@ module_param(input_boost_enabled, uint, 0644);
 static unsigned int input_boost_ms = 40;
 module_param(input_boost_ms, uint, 0644);
 
+static unsigned int migration_load_threshold = 15;
+module_param(migration_load_threshold, uint, 0644);
+
+static bool load_based_syncs;
+module_param(load_based_syncs, bool, 0644);
+
+static bool hotplug_boost;
+module_param(hotplug_boost, bool, 0644);
+
+bool wakeup_boost;
+module_param(wakeup_boost, bool, 0644);
+
 static struct delayed_work input_boost_rem;
 static u64 last_input_time;
+
+static unsigned int min_input_interval = 150;
+module_param(min_input_interval, uint, 0644);
 
 static int set_input_boost_freq(const char *buf, const struct kernel_param *kp)
 {
@@ -145,7 +161,6 @@ static int boost_adjust_notify(struct notifier_block *nb, unsigned long val, voi
 			break;
 
 		min = max(b_min, ib_min);
-		min = min(min, policy->max);
 
 		pr_debug("CPU%u policy min before boost: %u kHz\n",
 			 cpu, policy->min);
@@ -167,7 +182,6 @@ static int boost_adjust_notify(struct notifier_block *nb, unsigned long val, voi
 
 static struct notifier_block boost_adjust_nb = {
 	.notifier_call = boost_adjust_notify,
-	.priority	= INT_MAX,
 };
 
 static void do_boost_rem(struct work_struct *work)
@@ -213,12 +227,13 @@ static void do_input_boost_rem(struct work_struct *work)
 
 static int boost_mig_sync_thread(void *data)
 {
-	int dest_cpu = (long) data;
+	int dest_cpu = (int) data;
 	int src_cpu, ret;
 	struct cpu_sync *s = &per_cpu(sync_info, dest_cpu);
 	struct cpufreq_policy dest_policy;
 	struct cpufreq_policy src_policy;
 	unsigned long flags;
+	unsigned int req_freq;
 
 	while(1) {
 		wait_event_interruptible(s->sync_wq, s->pending ||
@@ -240,21 +255,22 @@ static int boost_mig_sync_thread(void *data)
 		if (ret)
 			continue;
 
-		if (src_policy.cur == src_policy.cpuinfo.min_freq) {
-			pr_debug("No sync. Source CPU%d@%dKHz at min freq\n",
-				 src_cpu, src_policy.cur);
+		req_freq = load_based_syncs ?
+			(dest_policy.max * s->task_load) / 100 :
+							src_policy.cur;
+
+		if (req_freq <= dest_policy.cpuinfo.min_freq) {
+			pr_debug("No sync. Sync Freq:%u\n", req_freq);
 			continue;
 		}
 
+		if (sync_threshold)
+			req_freq = min(sync_threshold, req_freq);
+
 		cancel_delayed_work_sync(&s->boost_rem);
-		if (sync_threshold) {
-			if (src_policy.cur >= sync_threshold)
-				s->boost_min = sync_threshold;
-			else
-				s->boost_min = src_policy.cur;
-		} else {
-			s->boost_min = src_policy.cur;
-		}
+
+		s->boost_min = req_freq;
+
 		/* Force policy re-evaluation to trigger adjust notifier. */
 		get_online_cpus();
 		if (cpu_online(src_cpu))
@@ -282,10 +298,22 @@ static int boost_mig_sync_thread(void *data)
 }
 
 static int boost_migration_notify(struct notifier_block *nb,
-				unsigned long dest_cpu, void *arg)
+				unsigned long unused, void *arg)
 {
+	struct migration_notify_data *mnd = arg;
 	unsigned long flags;
-	struct cpu_sync *s = &per_cpu(sync_info, dest_cpu);
+	struct cpu_sync *s = &per_cpu(sync_info, mnd->dest_cpu);
+
+	if (load_based_syncs && (mnd->load <= migration_load_threshold))
+		return NOTIFY_OK;
+
+	if (load_based_syncs && ((mnd->load < 0) || (mnd->load > 100))) {
+		pr_err("cpu-boost:Invalid load: %d\n", mnd->load);
+		return NOTIFY_OK;
+	}
+
+	if (!load_based_syncs && (mnd->src_cpu == mnd->dest_cpu))
+		return NOTIFY_OK;
 
 	if (!boost_ms)
 		return NOTIFY_OK;
@@ -294,10 +322,11 @@ static int boost_migration_notify(struct notifier_block *nb,
 	if (s->thread == current)
 		return NOTIFY_OK;
 
-	pr_debug("Migration: CPU%d --> CPU%d\n", (int) arg, (int) dest_cpu);
+	pr_debug("Migration: CPU%d --> CPU%d\n", mnd->src_cpu, mnd->dest_cpu);
 	spin_lock_irqsave(&s->lock, flags);
 	s->pending = true;
-	s->src_cpu = (int) arg;
+	s->src_cpu = mnd->src_cpu;
+	s->task_load = load_based_syncs ? mnd->load : 0;
 	spin_unlock_irqrestore(&s->lock, flags);
 	/*
 	* Avoid issuing recursive wakeup call, as sync thread itself could be
@@ -315,7 +344,6 @@ static int boost_migration_notify(struct notifier_block *nb,
 
 static struct notifier_block boost_migration_nb = {
 	.notifier_call = boost_migration_notify,
-	.priority	= INT_MAX,
 };
 
 static void do_input_boost(struct work_struct *work)
@@ -344,19 +372,30 @@ static void cpuboost_input_event(struct input_handle *handle,
 		unsigned int type, unsigned int code, int value)
 {
 	u64 now;
+        unsigned int min_interval;
 
-	if (!input_boost_enabled || !input_boost_ms)
+	if (!input_boost_enabled || work_pending(&input_boost_work))
 		return;
 
 	now = ktime_to_us(ktime_get());
-	if ((now - last_input_time) < (input_boost_ms * USEC_PER_MSEC))
+	min_interval = max(min_input_interval, input_boost_ms);
+
+	if (now - last_input_time < min_interval * USEC_PER_MSEC)
 		return;
 
-	if (work_pending(&input_boost_work))
-		return;
-
+	pr_debug("Input boost for input event.\n");
 	queue_work(cpu_boost_wq, &input_boost_work);
 	last_input_time = ktime_to_us(ktime_get());
+}
+
+bool check_cpuboost(int cpu)
+{
+	struct cpu_sync *i_sync_info;
+	i_sync_info = &per_cpu(sync_info, cpu);
+
+	if (i_sync_info->input_boost_min > 0)
+		return true;
+	return false;
 }
 
 static int cpuboost_input_connect(struct input_handler *handler,
@@ -397,7 +436,6 @@ static void cpuboost_input_disconnect(struct input_handle *handle)
 }
 
 static const struct input_device_id cpuboost_ids[] = {
-	/* multi-touch touchscreen */
 	{
 		.flags = INPUT_DEVICE_ID_MATCH_EVBIT |
 			INPUT_DEVICE_ID_MATCH_ABSBIT,
@@ -405,20 +443,14 @@ static const struct input_device_id cpuboost_ids[] = {
 		.absbit = { [BIT_WORD(ABS_MT_POSITION_X)] =
 			BIT_MASK(ABS_MT_POSITION_X) |
 			BIT_MASK(ABS_MT_POSITION_Y) },
-	},
-	/* touchpad */
+	}, /* multi-touch touchscreen */
 	{
 		.flags = INPUT_DEVICE_ID_MATCH_KEYBIT |
 			INPUT_DEVICE_ID_MATCH_ABSBIT,
 		.keybit = { [BIT_WORD(BTN_TOUCH)] = BIT_MASK(BTN_TOUCH) },
 		.absbit = { [BIT_WORD(ABS_X)] =
 			BIT_MASK(ABS_X) | BIT_MASK(ABS_Y) },
-	},
-	/* Keypad */
-	{
-		.flags = INPUT_DEVICE_ID_MATCH_EVBIT,
-		.evbit = { BIT_MASK(EV_KEY) },
-	},
+	}, /* touchpad */
 	{ },
 };
 
@@ -428,6 +460,28 @@ static struct input_handler cpuboost_input_handler = {
 	.disconnect     = cpuboost_input_disconnect,
 	.name           = "cpu-boost",
 	.id_table       = cpuboost_ids,
+};
+
+static int cpuboost_cpu_callback(struct notifier_block *cpu_nb,
+				 unsigned long action, void *hcpu)
+{
+	switch (action & ~CPU_TASKS_FROZEN) {
+		case CPU_ONLINE:
+			if (!hotplug_boost || !input_boost_enabled ||
+			     work_pending(&input_boost_work))
+				break;
+			pr_debug("Hotplug boost for CPU%lu\n", (long)hcpu);
+			queue_work(cpu_boost_wq, &input_boost_work);
+			last_input_time = ktime_to_us(ktime_get());
+			break;
+		default:
+			break;
+	}
+	return NOTIFY_OK;
+}
+
+static struct notifier_block __refdata cpu_nblk = {
+        .notifier_call = cpuboost_cpu_callback,
 };
 
 static int cpu_boost_init(void)
@@ -449,15 +503,22 @@ static int cpu_boost_init(void)
 		atomic_set(&s->being_woken, 0);
 		spin_lock_init(&s->lock);
 		INIT_DELAYED_WORK(&s->boost_rem, do_boost_rem);
-		s->thread = kthread_run(boost_mig_sync_thread,
-				(void *) (long)cpu, "boost_sync/%d", cpu);
+		s->thread = kthread_run(boost_mig_sync_thread, (void *)cpu,
+					"boost_sync/%d", cpu);
 		set_cpus_allowed(s->thread, *cpumask_of(cpu));
 	}
 	cpufreq_register_notifier(&boost_adjust_nb, CPUFREQ_POLICY_NOTIFIER);
 	atomic_notifier_chain_register(&migration_notifier_head,
 					&boost_migration_nb);
 	ret = input_register_handler(&cpuboost_input_handler);
+	if (ret)
+		pr_err("Cannot register cpuboost input handler.\n");
+
+	ret = register_hotcpu_notifier(&cpu_nblk);
+	if (ret)
+		pr_err("Cannot register cpuboost hotplug handler.\n");
 
 	return 0;
 }
+
 late_initcall(cpu_boost_init);
