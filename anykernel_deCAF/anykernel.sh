@@ -166,7 +166,7 @@ chmod -R 766 $initd
 mv $bindir/mpdecision $bindir/mpdecision-rm
 
 # remove qcom thermal engine
-mv $bindir/thermal-engine $bindir/thermal-engine-rm
+mv /system/etc/thermal-engine-8974.conf /system/etc/thermal-engine-8974-rm
 
 # add frandom compatibility
 backup_file ueventd.rc;
