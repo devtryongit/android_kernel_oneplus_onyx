@@ -10,7 +10,7 @@
 # Parameters to be configured manually
 #######################################
 
-deCAF_VERSION="Mark-VII"
+deCAF_VERSION="Mark-VIII"
 
 TOOLCHAIN="/opt/toolchains/u6X/bin/arm-linux-androideabi-"
 ARCHITECTURE=arm
