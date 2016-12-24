@@ -492,7 +492,7 @@ static void mdss_mdp_wb_free_node(struct mdss_mdp_wb_data *node)
 
 	if (node->user_alloc) {
 		buf = &node->buf_data.p[0];
-		pr_debug("free user mem_id=%d ihdl=%pK, offset=%u addr=0x%pa\n",
+		pr_debug("free user mem_id=%d ihdl=%pK, offset=%u addr=0x%x\n",
 				node->buf_info.memory_id,
 				buf->srcp_ihdl,
 				node->buf_info.offset,
