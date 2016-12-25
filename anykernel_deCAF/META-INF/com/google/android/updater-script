@@ -1,6 +1,6 @@
 show_progress(1.34, 4);
 ui_print(" ");
-ui_print("Zippy-deCAF: For those of us that can get out of bed");
+ui_print("deCAF: For those of us that can get out of bed");
 assert(package_extract_dir("", "/tmp/anykernel"));
 ui_print(file_getprop("/tmp/anykernel/anykernel.sh", "kernel.string"));
 ui_print("AnyKernel2 Installer ...");

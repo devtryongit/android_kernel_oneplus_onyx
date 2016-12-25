@@ -177,6 +177,9 @@ backup_file file_contexts;
 insert_line file_contexts "frandom" after "urandom" "/dev/frandom		u:object_r:frandom_device:s0\n";
 insert_line file_contexts "erandom" after "urandom" "/dev/erandom               u:object_r:erandom_device:s0\n";
 
+# Symlink new wakeup_sources path to /d/wakeup_sources
+replace_line init.qcom.rc "chown system system /sys/kernel/debug/kgsl/proc" "symlink /proc/wakeup /d";
+
 # xPrivacy
 # Thanks to @Shadowghoster & @@laufersteppenwolf
 param=$(grep "xprivacy" service_contexts)
