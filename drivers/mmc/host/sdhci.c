@@ -1592,7 +1592,7 @@ static int sdhci_get_tuning_cmd(struct sdhci_host *host)
 		return MMC_SEND_TUNING_BLOCK;
 }
 
-static void sdhci_cfg_irq(struct sdhci_host *host, bool enable, bool sync)
+void sdhci_cfg_irq(struct sdhci_host *host, bool enable, bool sync)
 {
 	if (enable && !host->irq_enabled) {
 		enable_irq(host->irq);
@@ -1657,8 +1657,6 @@ static void sdhci_request(struct mmc_host *mmc, struct mmc_request *mrq)
 			present = sdhci_readl(host, SDHCI_PRESENT_STATE) &
 					SDHCI_CARD_PRESENT;
 	}
-
-	present = mmc_gpio_get_cd(host->mmc);
 
 	SDHCI_SPIN_LOCK(host, true);
 
