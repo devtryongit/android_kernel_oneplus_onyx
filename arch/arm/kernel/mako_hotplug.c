@@ -42,7 +42,7 @@
 #define NUM_POSSIBLE_CPUS num_possible_cpus()
 #define HIGH_LOAD (95)
 
-struct cpu_stats {
+static struct cpu_stats {
 	unsigned int counter;
 	u64 timestamp;
 } stats = {
