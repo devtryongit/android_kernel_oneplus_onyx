@@ -12,7 +12,7 @@
 
 deCAF_VERSION="Mark-"
 
-TOOLCHAIN="/opt/toolchains/u6X/bin/arm-linux-androideabi-"
+TOOLCHAIN="/opt/toolchains/u7X/bin/arm-eabi-"
 ARCHITECTURE=arm
 COMPILER_FLAGS_KERNEL=""
 COMPILER_FLAGS_MODULE=""
