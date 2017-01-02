@@ -484,7 +484,7 @@ static ssize_t kcal_sat_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
+	if (mdss_mdp_kcal_display_commit() && lut_data->enable)
 		mdss_mdp_kcal_read_pa(lut_data);
 
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->sat);
@@ -513,7 +513,7 @@ static ssize_t kcal_hue_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
+	if (mdss_mdp_kcal_display_commit() && lut_data->enable)
 		mdss_mdp_kcal_read_pa(lut_data);
 
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->hue);
@@ -542,7 +542,7 @@ static ssize_t kcal_val_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
+	if (mdss_mdp_kcal_display_commit() && lut_data->enable)
 		mdss_mdp_kcal_read_pa(lut_data);
 
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->val);
@@ -571,7 +571,7 @@ static ssize_t kcal_cont_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
+	if (mdss_mdp_kcal_display_commit() && lut_data->enable)
 		mdss_mdp_kcal_read_pa(lut_data);
 
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->cont);
