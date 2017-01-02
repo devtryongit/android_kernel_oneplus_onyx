@@ -314,7 +314,6 @@ struct sdhci_ops {
 	int	(*config_auto_tuning_cmd)(struct sdhci_host *host,
 					  bool enable,
 					  u32 type);
-	void	(*cfg_power_irq)(struct sdhci_host *host, bool enable);
 };
 
 #ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
