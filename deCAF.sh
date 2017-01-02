@@ -74,7 +74,7 @@ if [ -f ~/x-settings.sh ]; then
 	. ~/x-settings.sh
 fi
 
-deCAF_FILENAME="deCAF-$deCAF_VERSION"
+deCAF_FILENAME="Practical-$deCAF_VERSION"
 
 # set environment
 export ARCH=$ARCHITECTURE
