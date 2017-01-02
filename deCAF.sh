@@ -26,7 +26,7 @@ OUTPUT_FOLDER=""
 
 DEFCONFIG="hadron_defconfig"
 DEFCONFIG_VARIANT=""
-KERNEL_NAME="Hadron"
+KERNEL_NAME="Practically"
 
 FINISH_MAIL_TO=""
 

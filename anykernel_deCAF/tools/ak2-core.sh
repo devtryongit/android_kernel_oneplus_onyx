@@ -66,7 +66,7 @@ dump_boot()
 	fi;
 
 	if [ -f $ramdisk/hadron-anykernel ]; then
-			ui_print "  Quarks reconfiguring Hadron...";
+			ui_print "  Previous kernel was Practically there...";
 			ui_print " ";
 	fi
 
