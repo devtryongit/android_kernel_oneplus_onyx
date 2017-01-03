@@ -43,6 +43,8 @@
 static DEFINE_SPINLOCK(elv_list_lock);
 static LIST_HEAD(elv_list);
 
+static char elevator_hard[ELV_NAME_MAX];
+
 /*
  * Merge hash stuff.
  */
@@ -228,6 +230,8 @@ int elevator_init(struct request_queue *q, char *name)
 	struct elevator_queue *eq;
 	int err;
 
+	*elevator_hard = '\0';
+	
 	if (unlikely(q->elevator))
 		return 0;
 
@@ -1096,10 +1100,10 @@ ssize_t elv_iosched_store(struct request_queue *q, const char *name,
 	if (!q->elevator)
 		return count;
 
-	if ((strlen(q->elevator_hard) != 0) && (! strstr(name, q->elevator_hard)))
+	if ((strlen(elevator_hard) != 0) && (! strstr(name, elevator_hard)))
 	{
 		sscanf(name, "%s", elevator_name);
-		printk(KERN_ERR "elevator: switch to %s failed due to Boeffla hard value set to %s\n", elevator_name, q->elevator_hard);
+		printk(KERN_ERR "elevator: switch to %s failed due to Boeffla hard value set to %s\n", elevator_name, elevator_hard);
 		return count;
 	}
 
@@ -1140,14 +1144,14 @@ ssize_t elv_iosched_hard_store(struct request_queue *q, const char *name,
 			  size_t count)
 {
 	if (strlen(name) < ELV_NAME_MAX)
-		sscanf(name, "%s", q->elevator_hard);
+		sscanf(name, "%s", elevator_hard);
 
 	return count;
 }
 
 ssize_t elv_iosched_hard_show(struct request_queue *q, char *name)
 {
-	return sprintf(name, "%s\n", q->elevator_hard);
+	return sprintf(name, "%s\n", elevator_hard);
 }
 
 struct request *elv_rb_former_request(struct request_queue *q,
