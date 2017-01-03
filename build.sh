@@ -10,7 +10,7 @@
 # Parameters to be configured manually
 #######################################
 
-ZIPPY_VERSION="Mark-"
+ZIPPY_VERSION="Mark-I"
 
 TOOLCHAIN="/opt/toolchains/u6X/bin/arm-linux-androideabi-"
 ARCHITECTURE=arm
