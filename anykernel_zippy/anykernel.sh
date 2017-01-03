@@ -48,6 +48,19 @@ backup_file init.rc;
 replace_string init.rc "chmod 0660 /sys/module/lowmemorykiller/parameters/adj" "chmod 0220 /sys/module/lowmemorykiller/parameters/adj" "chmod 0660 /sys/module/lowmemorykiller/parameters/adj";
 replace_string init.rc "chmod 0660 /sys/module/lowmemorykiller/parameters/minfree" "chmod 0220 /sys/module/lowmemorykiller/parameters/minfree" "chmod 0660 /sys/module/lowmemorykiller/parameters/minfree";
 
+# remove mpdecsion binary
+mv $bindir/mpdecision $bindir/mpdecision-rm
+
+# remove qcom thermal engine
+mv /system/etc/thermal-engine-8974.conf /system/etc/thermal-engine-8974-rm
+
+# xPrivacy
+# Thanks to @Shadowghoster & @@laufersteppenwolf
+param=$(grep "xprivacy" service_contexts)
+if [ -z $param ]; then
+    echo -ne "xprivacy453                               u:object_r:system_server_service:s0\n" >> service_contexts
+fi
+
 ############### Ramdisk customization end ###############
 
 # write new kernel
