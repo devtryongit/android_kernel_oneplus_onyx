@@ -2,7 +2,7 @@
 #
 # Original and credits: osm0sis @ xda-developers
 #
-# Modified by Lord Boeffla, 05.12.2016
+# Modified by RJ Murdok
 
 ############### AnyKernel setup start ############### 
 
@@ -14,18 +14,10 @@ do.cleanup=1
 device.name1=OnePlus
 device.name2=ONE
 device.name3=onyx
-device.name4=E1003
-device.name5=
-device.name6=
-device.name7=
-device.name8=
-device.name9=
-device.name10=
-device.name11=
-device.name12=
-device.name13=
-device.name14=
-device.name15=
+device.name4=E1005
+device.name5=E1003
+device.name6=E1001
+device.name7=E1000
 
 # shell variables
 block=/dev/block/platform/msm_sdcc.1/by-name/boot;
@@ -49,8 +41,7 @@ chmod 775 $ramdisk/sbin
 chmod 755 $ramdisk/sbin/busybox
 
 chmod 775 $ramdisk/res
-chmod -R 755 $ramdisk/res/bc
-chmod -R 755 $ramdisk/res/misc
+chmod -R 755 $ramdisk/res
 
 # ramdisk changes
 backup_file init.rc;

@@ -2,7 +2,7 @@
 #
 # Original and credits: osm0sis @ xda-developers
 #
-# Modified by Lord Boeffla, 05.12.2016
+# Modified by RJ Murdok
 
 
 ## start of main script
@@ -65,13 +65,13 @@ dump_boot()
 		exit 1;
 	fi;
 
-	if [ -f $ramdisk/boeffla-anykernel ]; then
-			ui_print "  Installing over existing Boeffla Anykernel...";
+	if [ -f $ramdisk/zippy-anykernel ]; then
+			ui_print "  Upating Zippy Kernel...";
 			ui_print " ";
 	fi
 
 	if [ -d $ramdisk/su ]; then
-			ui_print "  SuperSu systemless detected...";
+			ui_print "  Systemless SuperSU detected...";
 			ui_print " ";
 
 			SAVE_IFS=$IFS;
