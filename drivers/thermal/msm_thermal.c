@@ -109,8 +109,10 @@ static void limit_cpu_freqs(uint32_t max_freq)
 
 	if (num_online_cpus() < NR_CPUS) {
 		if (max_freq > FREQ_NOTE_7)
-			cpu_online_wrapper(2);
+			cpu_online_wrapper(1);
 		if (max_freq > FREQ_HELL)
+			cpu_online_wrapper(2);
+		if (max_freq > FREQ_VERY_HOT)
 			cpu_online_wrapper(3);
 	}
 
@@ -119,10 +121,12 @@ static void limit_cpu_freqs(uint32_t max_freq)
 		cpufreq_update_policy(cpu);
 	put_online_cpus();
 
-	if (max_freq == FREQ_HELL)
+	if (max_freq == FREQ_VERY_HOT)
 		cpu_offline_wrapper(3);
-	else if (max_freq == FREQ_NOTE_7)
+	else if (max_freq == FREQ_HELL)
 		cpu_offline_wrapper(2);
+	else if (max_freq == FREQ_NOTE_7)
+		cpu_offline_wrapper(1);
 
 	info.pending_change = false;
 }
