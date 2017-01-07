@@ -10,9 +10,9 @@
 # Parameters to be configured manually
 #######################################
 
-deCAF_VERSION="Mark-I"
+deCAF_VERSION="Mark-II"
 
-TOOLCHAIN="/opt/toolchains/u6X/bin/arm-linux-androideabi-"
+TOOLCHAIN="/opt/toolchains/d6X/bin/arm-LG-linux-gnueabi-"
 ARCHITECTURE=arm
 COMPILER_FLAGS_KERNEL=""
 COMPILER_FLAGS_MODULE=""
