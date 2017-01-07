@@ -162,7 +162,6 @@ maple_choose_request(struct maple_data *mdata, int data_dir)
 	/* Increase (non-expired-)batch-counter */
 	mdata->batched++;
 
-
 	/*
 	 * Retrieve request from available fifo list.
 	 * Asynchronous requests have priority over synchronous.
@@ -262,22 +261,14 @@ maple_latter_request(struct request_queue *q, struct request *rq)
 	return list_entry(rq->queuelist.next, struct request, queuelist);
 }
 
-static int maple_init_queue(struct request_queue *q, struct elevator_type *e)
+static void *maple_init_queue(struct request_queue *q)
 {
 	struct maple_data *mdata;
-	struct elevator_queue *eq;
-
-	eq = elevator_alloc(q, e);
-	if (!eq)
-		return -ENOMEM;
 
 	/* Allocate structure */
 	mdata = kmalloc_node(sizeof(*mdata), GFP_KERNEL, q->node);
-	if (!mdata) {
-		kobject_put(&eq->kobj);
-		return -ENOMEM;
-	}
-	eq->elevator_data = mdata;
+	if (!mdata)
+		return NULL;
 
 	/* Initialize fifo lists */
 	INIT_LIST_HEAD(&mdata->fifo_list[SYNC][READ]);
@@ -295,10 +286,7 @@ static int maple_init_queue(struct request_queue *q, struct elevator_type *e)
 	mdata->writes_starved = writes_starved;
 	mdata->sleep_latency_multiple = sleep_latency_multiple;
 
-	spin_lock_irq(q->queue_lock);
-	q->elevator = eq;
-	spin_unlock_irq(q->queue_lock);
-	return 0;
+	return mdata;
 }
 
 static void
@@ -406,9 +394,7 @@ static struct elevator_type iosched_maple = {
 static int __init maple_init(void)
 {
 	/* Register elevator */
-	elv_register(&iosched_maple);
-
-	return 0;
+	return elv_register(&iosched_maple);
 }
 
 static void __exit maple_exit(void)
