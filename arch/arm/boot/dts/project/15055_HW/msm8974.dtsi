@@ -1831,24 +1831,27 @@
 		compatible = "qcom,msm-audio-ion";
 	};
 
-	qti,msm-pcm {
-		compatible = "qti,msm-pcm-dsp";
-		qti,msm-pcm-dsp-id = <0>;
+	qcom,msm-pcm {
+		compatible = "qcom,msm-pcm-dsp";
+		qcom,msm-pcm-dsp-id = <0>;
 	};
 
-	qti,msm-pcm-low-latency {
-		compatible = "qti,msm-pcm-dsp";
-		qti,msm-pcm-dsp-id = <1>;
-		qti,msm-pcm-low-latency;
-		qti,latency-level = "regular";
+	qcom,msm-pcm-low-latency {
+		compatible = "qcom,msm-pcm-dsp";
+		qcom,msm-pcm-dsp-id = <1>;
+		qcom,msm-pcm-low-latency;
+		qcom,latency-level = "regular";
+	};
+
+	qcom,msm-pcm-ultra-low-latency {
+		compatible = "qcom,msm-pcm-dsp";
+		qcom,msm-pcm-dsp-id = <2>;
+		qcom,msm-pcm-low-latency;
+		qcom,latency-level = "ultra";
 	};
 
 	qcom,msm-pcm-routing {
 		compatible = "qcom,msm-pcm-routing";
-	};
-
-	qcom,msm-pcm-lpa {
-		compatible = "qcom,msm-pcm-lpa";
 	};
 
 	qcom,msm-compr-dsp {
@@ -1888,8 +1891,8 @@
 		compatible = "qcom,msm-lsm-client";
 	};
 
-	qti,msm-pcm-loopback {
-		compatible = "qti,msm-pcm-loopback";
+	qcom,msm-pcm-loopback {
+		compatible = "qcom,msm-pcm-loopback";
 	};
 
 	qcom,msm-voice-svc {
@@ -2477,6 +2480,12 @@
 		};
 	};
 
+	qcom,msm-thermal-simple {
+		compatible = "qcom,msm-thermal-simple";
+		qcom,thermal-vadc = <&pm8941_vadc>;
+		qcom,adc-channel = <178>;
+	};
+
 	qcom,bam_dmux@fc834000 {
 		compatible = "qcom,bam_dmux";
 		reg = <0xfc834000 0x7000>;
@@ -2492,8 +2501,7 @@
         memory_hole: qcom,msm-mem-hole {
                 compatible = "qcom,msm-mem-hole";
                 qcom,memblock-remove = <0x5d00000 0x7d00000
-					0xfa00000 0x500000
-					0x05900000 0x100000>; /* Address and Size of Hole */
+					0xfa00000 0x500000>; /* Address and Size of Hole */
         };
 	//#endif /* VENDOR_EDIT */
 
