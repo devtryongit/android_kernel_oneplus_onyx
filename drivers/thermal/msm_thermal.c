@@ -26,7 +26,7 @@
 #include <linux/of.h>
 #include <linux/ratelimit.h>
 
-unsigned int temp_threshold = 42;
+unsigned int temp_threshold = CONFIG_TEMP_THRESH;
 module_param(temp_threshold, int, 0644);
 
 static struct thermal_info {
@@ -44,18 +44,18 @@ static struct thermal_info {
 };
 
 enum thermal_freqs {
-	FREQ_NOTE_7		= 652800,
-	FREQ_HELL		= 960000,
-	FREQ_VERY_HOT		= 1190400,
-	FREQ_HOT		= 1574400,
-	FREQ_WARM		= 1958400,
+	FREQ_NOTE_7		= CONFIG_FREQ_NOTE_7,
+	FREQ_HELL		= CONFIG_FREQ_HELL,
+	FREQ_VERY_HOT		= CONFIG_FREQ_VERY_HOT,
+	FREQ_HOT		= CONFIG_FREQ_HOT,
+	FREQ_WARM		= CONFIG_FREQ_WARM,
 };
 
 enum threshold_levels {
-	LEVEL_NOTE_7		= 8,
-	LEVEL_HELL		= 6,
-	LEVEL_VERY_HOT		= 4,
-	LEVEL_HOT		= 2,
+	LEVEL_NOTE_7		= CONFIG_LEVEL_NOTE_7,
+	LEVEL_HELL		= CONFIG_LEVEL_HELL,
+	LEVEL_VERY_HOT		= CONFIG_LEVEL_VERY_HOT,
+	LEVEL_HOT		= CONFIG_LEVEL_HOT,
 };
 
 static struct qpnp_vadc_chip *vadc_dev;
@@ -108,12 +108,22 @@ static void limit_cpu_freqs(uint32_t max_freq)
 		KBUILD_MODNAME, max_freq);
 
 	if (num_online_cpus() < NR_CPUS) {
+#if defined(CONFIG_MSM_THERM_HEXA) || defined(CONFIG_MSM_THERM_OCTA)
+		if (max_freq > FREQ_HELL)
+			cpu_online_wrapper(5);
+			cpu_online_wrapper(6);
+#ifdef CONFIG_MSM_THERM_OCTA
+			cpu_online_wrapper(7);
+			cpu_online_wrapper(8);
+#endif
+#else
 		if (max_freq > FREQ_NOTE_7)
 			cpu_online_wrapper(1);
 		if (max_freq > FREQ_HELL)
 			cpu_online_wrapper(2);
 		if (max_freq > FREQ_VERY_HOT)
 			cpu_online_wrapper(3);
+#endif
 	}
 
 	get_online_cpus();
@@ -121,12 +131,22 @@ static void limit_cpu_freqs(uint32_t max_freq)
 		cpufreq_update_policy(cpu);
 	put_online_cpus();
 
+#if defined(CONFIG_MSM_THERM_HEXA) || defined(CONFIG_MSM_THERM_OCTA)
+	if (max_freq == FREQ_HELL)
+#ifdef CONFIG_MSM_THERM_OCTA
+		cpu_offline_wrapper(8);
+		cpu_offline_wrapper(7);
+#endif
+		cpu_offline_wrapper(6);
+		cpu_offline_wrapper(5);
+#else
 	if (max_freq == FREQ_VERY_HOT)
 		cpu_offline_wrapper(3);
 	else if (max_freq == FREQ_HELL)
 		cpu_offline_wrapper(2);
 	else if (max_freq == FREQ_NOTE_7)
 		cpu_offline_wrapper(1);
+#endif
 
 	info.pending_change = false;
 }
@@ -210,7 +230,11 @@ static int msm_thermal_dev_remove(struct platform_device *pdev)
 }
 
 static struct of_device_id msm_thermal_match_table[] = {
+#ifdef CONFIG_MSM_THERM_VADC
 	{.compatible = "qcom,msm-thermal-simple"},
+#else
+	{.compatible = "qcom,msm-thermal"},
+#endif
 	{},
 };
 
@@ -218,7 +242,11 @@ static struct platform_driver msm_thermal_device_driver = {
 	.probe = msm_thermal_dev_probe,
 	.remove = msm_thermal_dev_remove,
 	.driver = {
+#ifdef CONFIG_MSM_THERM_VADC
 		.name = "msm-thermal-simple",
+#else
+		.name = "msm-thermal",
+#endif
 		.owner = THIS_MODULE,
 		.of_match_table = msm_thermal_match_table,
 	},
@@ -236,3 +264,4 @@ static void __exit msm_thermal_device_exit(void)
 
 arch_initcall(msm_thermal_device_init);
 module_exit(msm_thermal_device_exit);
+
