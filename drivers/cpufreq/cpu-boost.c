@@ -182,7 +182,6 @@ static int boost_adjust_notify(struct notifier_block *nb, unsigned long val, voi
 
 static struct notifier_block boost_adjust_nb = {
 	.notifier_call = boost_adjust_notify,
-	.priority	= INT_MAX,
 };
 
 static void do_boost_rem(struct work_struct *work)
@@ -345,7 +344,6 @@ static int boost_migration_notify(struct notifier_block *nb,
 
 static struct notifier_block boost_migration_nb = {
 	.notifier_call = boost_migration_notify,
-	.priority	= INT_MAX,
 };
 
 static void do_input_boost(struct work_struct *work)
@@ -485,6 +483,16 @@ static int cpuboost_cpu_callback(struct notifier_block *cpu_nb,
 static struct notifier_block __refdata cpu_nblk = {
         .notifier_call = cpuboost_cpu_callback,
 };
+
+static void __wakeup_boost(void)
+{
+	if (!wakeup_boost || !input_boost_enabled ||
+	     work_pending(&input_boost_work))
+		return;
+	pr_debug("Wakeup boost for display on event.\n");
+	queue_work(cpu_boost_wq, &input_boost_work);
+	last_input_time = ktime_to_us(ktime_get());
+}
 
 static int cpu_boost_init(void)
 {
