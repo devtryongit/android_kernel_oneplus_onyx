@@ -206,7 +206,6 @@
 		#address-cells = <1>;
 		#size-cells = <1>;
 		status = "disabled";
-		
 
 		/* modify by xcb */
 		qcom,use-external-rsense;
@@ -218,16 +217,16 @@
 		qcom,ibatsafe-ma = <1500>;
 		qcom,thermal-mitigation = <1800 1500 1200 1000 800>;
 		qcom,cool-bat-decidegc = <120>;
-		qcom,cool-bat-mv = <4180>;
+		qcom,cool-bat-mv = <4320>;
 		qcom,ibatmax-warm-ma = <500>;
-		qcom,warm-bat-decidegc = <430>;
+		qcom,warm-bat-decidegc = <450>;
 		qcom,warm-bat-mv = <4080>;
 		qcom,ibatmax-cool-ma = <500>;
 //#ifdef CONFIG_VENDOR_EDIT
 		// add by xcb
 		qcom,batt-hot-percentage = <25>;
 		qcom,batt-cold-percentage = <80>;
-		
+
 		qcom,cold-bat-decidegc = <30>; // -30
 		qcom,overheat-bat-decidegc = <530>;
 		qcom,little-cool-bat-decidegc = <220>;
@@ -900,7 +899,6 @@
 		qcom,adc-bit-resolution = <15>;
 		qcom,adc-vdd-reference = <1800>;
 		qcom,adc_tm-vadc = <&pm8941_vadc>;
-		
 
 		/* Channel Node */
 		chan@b9 {
@@ -1301,10 +1299,15 @@
 	qcom,vibrator@c000 {
 		compatible = "qcom,qpnp-vibrator";
 		reg = <0xc000 0x100>;
+/* OEM taokai 2016-05-13 add begin for vibrator*/
 		qcom,vib-timeout-ms = <15000>;
 		qcom,vib-vtg-level-mV = <3100>;
-		qcom,vib-vtg-min-mV = <1900>;
+/* OEM taokai 2016-05-13 add end for vibrator*/
+		label = "vibrator";
+/* OEM taokai 2016-05-13 modify begin for vibrator*/
+	//	status = "disabled";
 		status = "okay";
+/* OEM taokai 2016-05-13 modify end for vibrator*/
 	};
 
 	qcom,leds@d000 {

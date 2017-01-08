@@ -99,7 +99,7 @@
 /*OPPO yubin 2013-10-10 add begin for tp*/
 //shankai add start
 		synaptics@20 {
-			compatible = "synaptics,oppo";
+			compatible = "synaptics,oem";
 			reg = <0x20>;
 			interrupt-parent = <&msmgpio>;
 			interrupts = <61 0x2008>;
@@ -896,7 +896,6 @@ tri_state_key {
 //		qcom,master-en = <1>;
 //	};
 //#else
-/*LiQiu@oem.cn modify for VCI enable*/
 gpio@e000 { /* GPIO 33 */
 		qcom,mode = <1>;		/* QPNP_PIN_MODE_DIG_OUT */
 		qcom,output-type = <0>;		/* QPNP_PIN_OUT_BUF_CMOS */

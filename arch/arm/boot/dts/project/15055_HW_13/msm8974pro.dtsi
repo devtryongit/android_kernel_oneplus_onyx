@@ -1682,12 +1682,14 @@
 	vdd-cx-supply = <&pm8841_s2_corner>;
 };
 
-&mdss_hdmi_tx {
+//#ifndef VENDOR_EDIT
+/*&mdss_hdmi_tx {
 	reg =	<0xfd922100 0x370>,
 		<0xfd922500 0x7C>,
 		<0xfc4b8000 0x60F0>;
 	reg-names = "core_physical", "phy_physical", "qfprom_physical";
-};
+};*/
+//#endif
 
 &msm_vidc {
 	qcom,vidc-ns-map = <0x40000000 0x40000000>;
