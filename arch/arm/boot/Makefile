@@ -15,11 +15,7 @@ ifneq ($(MACHINE),)
 include $(srctree)/$(MACHINE)/Makefile.boot
 endif
 
-include $(srctree)/arch/arm/boot/dts/project/15055_HW_11/Makefile
-include $(srctree)/arch/arm/boot/dts/project/15055_HW_12/Makefile
-include $(srctree)/arch/arm/boot/dts/project/15055_HW_13/Makefile
-include $(srctree)/arch/arm/boot/dts/project/15055_HW_14/Makefile
-include $(srctree)/arch/arm/boot/dts/project/15055_HW_15/Makefile
+include $(srctree)/arch/arm/boot/dts/project/15055_HW/Makefile
 
 # Note: the following conditions must always be true:
 #   ZRELADDR == virt_to_phys(PAGE_OFFSET + TEXT_OFFSET)
