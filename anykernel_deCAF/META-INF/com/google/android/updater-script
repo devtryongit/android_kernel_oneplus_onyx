@@ -1,6 +1,6 @@
 show_progress(1.34, 4);
 ui_print(" ");
-ui_print("Practical: even though it isn't");
+ui_print("Murdok: I may be blind, but I have a vision");
 assert(package_extract_dir("", "/tmp/anykernel"));
 ui_print(file_getprop("/tmp/anykernel/anykernel.sh", "kernel.string"));
 ui_print("AnyKernel2 Installer ...");
