@@ -30,7 +30,7 @@
 #include <linux/of.h>
 #include <linux/ratelimit.h>
 
-unsigned int temp_threshold = CONFIG_TEMP_THRESH;
+unsigned int temp_threshold = 42;
 module_param(temp_threshold, int, 0644);
 
 static struct thermal_info {
@@ -48,18 +48,18 @@ static struct thermal_info {
 };
 
 enum thermal_freqs {
-	FREQ_NOTE_7		= CONFIG_FREQ_NOTE_7,
-	FREQ_HELL		= CONFIG_FREQ_HELL,
-	FREQ_VERY_HOT		= CONFIG_FREQ_VERY_HOT,
-	FREQ_HOT		= CONFIG_FREQ_HOT,
-	FREQ_WARM		= CONFIG_FREQ_WARM,
+	FREQ_NOTE_7		= 652800,
+	FREQ_HELL		= 960000,
+	FREQ_VERY_HOT		= 1190400,
+	FREQ_HOT		= 1574400,
+	FREQ_WARM		= 1958400,
 };
 
 enum threshold_levels {
-	LEVEL_NOTE_7		= CONFIG_LEVEL_NOTE_7,
-	LEVEL_HELL		= CONFIG_LEVEL_HELL,
-	LEVEL_VERY_HOT		= CONFIG_LEVEL_VERY_HOT,
-	LEVEL_HOT		= CONFIG_LEVEL_HOT,
+	LEVEL_NOTE_7		= 8,
+	LEVEL_HELL		= 6,
+	LEVEL_VERY_HOT		= 4,
+	LEVEL_HOT		= 2,
 };
 
 #ifdef CONFIG_MSM_THERM_VADC
