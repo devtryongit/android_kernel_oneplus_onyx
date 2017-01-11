@@ -27,6 +27,7 @@
 #include <linux/delay.h>
 #include <linux/input.h>
 #include <linux/jiffies.h>
+#include <linux/ratelimit.h>
 
 #define MAKO_HOTPLUG "mako_hotplug"
 
@@ -108,7 +109,7 @@ static inline void cpus_online_work(void)
 			cpu_up(cpu);
 	}
 
-	pr_info("%s: all cpus were onlined\n", MAKO_HOTPLUG);
+	pr_info_ratelimited("%s: all cpus were onlined\n", MAKO_HOTPLUG);
 }
 
 static inline void cpus_offline_work(void)
@@ -120,7 +121,7 @@ static inline void cpus_offline_work(void)
 			cpu_down(cpu);
 	}
 
-	pr_info("%s: all cpus were offlined\n", MAKO_HOTPLUG);
+	pr_info_ratelimited("%s: all cpus were offlined\n", MAKO_HOTPLUG);
 }
 
 static inline bool cpus_cpufreq_work(void)
@@ -551,7 +552,7 @@ static int __init mako_hotplug_init(void)
 	if (ret)
 		return ret;
 
-	pr_info("%s: init\n", MAKO_HOTPLUG);
+	pr_info_ratelimited("%s: init\n", MAKO_HOTPLUG);
 
 	return ret;
 }
