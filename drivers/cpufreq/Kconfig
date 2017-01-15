@@ -93,6 +93,13 @@ config CPU_FREQ_DEFAULT_GOV_SMARTMAX
 	select CPU_FREQ_GOV_SMARTMAX
 	help
 	  Use the CPUFreq governor 'smartmax' as default
+	  
+config CPU_FREQ_DEFAULT_GOV_ELEMENTALX
+	bool "elementalx"
+	select CPU_FREQ_GOV_ELEMENTALX
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	  Use the CPUFreq governor 'elementalx' as default.
 
 config CPU_FREQ_DEFAULT_GOV_SLIM
 	bool "slim"
@@ -209,6 +216,19 @@ config CPU_FREQ_GOV_SMARTMAX
 	select CPU_FREQ_TABLE
 	help
 	  'smartmax' combined ondemand and smartass2
+	  
+config CPU_FREQ_GOV_ELEMENTALX
+	tristate "'elementalx' cpufreq policy governor"
+	select CPU_FREQ_TABLE
+	help
+	  'elementalx' - This driver adds a dynamic cpufreq policy governor.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called cpufreq_elementalx.
+	
+          For details, take a look at linux/Documentation/cpu-freq.
+
+	  If in doubt, say N.
 
 config CPU_FREQ_GOV_SLIM
 	tristate "'slim' cpufreq policy governor"
@@ -267,7 +287,22 @@ config CPU_INPUT_BOOST
 	bool "CPU Input Boost"
 	help
 	  Boosts the CPU on touchscreen and touchpad input. Boost frequencies and
-	  duration are configured via sysfs (/sys/kernel/cpu_input_boost/*).	
+	  duration are configured via sysfs (/sys/kernel/cpu_input_boost/*).
+
+config CPU_FREQ_GOV_BLU_ACTIVE
+	tristate "'blu_active' cpufreq policy governor"
+	help
+	  'blu_active' - This driver adds a dynamic cpufreq policy governor
+	  designed for latency-sensitive workloads.
+
+	  This governor attempts to reduce the latency of clock
+	  increases so that the system is more responsive to
+	  interactive workloads.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called cpufreq_blu_active.
+
+	  If in doubt, say N.	
 
 config CPU_FREQ_GOV_DARKNESS
 	tristate "'darkness' cpufreq policy governor"
