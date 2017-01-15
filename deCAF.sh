@@ -10,7 +10,7 @@
 # Parameters to be configured manually
 #######################################
 
-deCAF_VERSION="Mark-III"
+deCAF_VERSION="Mark-"
 
 TOOLCHAIN="/opt/toolchains/d6X/bin/arm-LG-linux-gnueabi-"
 ARCHITECTURE=arm
@@ -26,7 +26,7 @@ OUTPUT_FOLDER=""
 
 DEFCONFIG="onyx_defconfig"
 DEFCONFIG_VARIANT=""
-KERNEL_NAME="Murdok"
+KERNEL_NAME="Aries"
 
 FINISH_MAIL_TO=""
 
@@ -74,7 +74,7 @@ if [ -f ~/x-settings.sh ]; then
 	. ~/x-settings.sh
 fi
 
-deCAF_FILENAME="Murdok-$deCAF_VERSION"
+deCAF_FILENAME="Aries-$deCAF_VERSION"
 
 # set environment
 export ARCH=$ARCHITECTURE

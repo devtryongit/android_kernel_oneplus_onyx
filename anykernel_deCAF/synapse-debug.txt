@@ -1,0 +1,73 @@
+Command: adb logcat | grep synapse
+
+# CM13.0 (12/13/2016)
+# Works? No.
+12-13 11:17:13.653   455   455 I busybox : type=1400 audit(0.0:24): avc: denied { search } for name="com.af.synapse" dev="mmcblk0p35" ino=33519 scontext=u:r:sysinit:s0 tcontext=u:object_r:app_data_file:s0:c512,c768 tclass=dir permissive=1
+12-13 11:17:13.653   455   455 I busybox : type=1400 audit(0.0:25): avc: denied { getattr } for path="/data/data/com.af.synapse/databases" dev="mmcblk0p35" ino=33716 scontext=u:r:sysinit:s0 tcontext=u:object_r:app_data_file:s0:c512,c768 tclass=dir permissive=1
+12-13 11:17:13.653   455   455 I busybox : type=1400 audit(0.0:29): avc: denied { getattr } for path="/data/data/com.af.synapse/databases/actionValueStore" dev="mmcblk0p35" ino=33717 scontext=u:r:sysinit:s0 tcontext=u:object_r:app_data_file:s0:c512,c768 tclass=file permissive=1
+12-13 11:17:17.726  1579  1579 I sh      : type=1400 audit(0.0:189): avc: denied { getattr } for path="/data/data/com.af.synapse" dev="mmcblk0p35" ino=33519 scontext=u:r:sysinit:s0 tcontext=u:object_r:app_data_file:s0:c512,c768 tclass=dir permissive=1
+12-13 11:17:19.622  1130  1130 W PackageManager: Unknown permission android.permission.ACCESS_SUPERUSER in package com.af.synapse
+12-13 11:17:20.151  1130  1130 I PackageManager.DexOptimizer: Running dexopt (dex2oat) on: /system/priv-app/Synapse/Synapse.apk pkg=com.af.synapse isa=arm vmSafeMode=false debuggable=false oatDir = null bootComplete=false
+12-13 11:17:20.154  1130  2072 W PackageManager: Unknown permission android.permission.ACCESS_SUPERUSER in package com.af.synapse
+12-13 11:17:28.376  1130  1194 I ActivityManager: Start proc 3274:com.af.synapse/u0a71 for broadcast com.af.synapse/.lib.BootReceiver
+12-13 11:17:28.416  3274  3274 E SQLiteLog: (14) os_unix.c:31278: (2) open(/data/user/0/com.af.synapse/databases/actionValueStore) - 
+12-13 11:17:28.418  3274  3274 E SQLiteDatabase: Failed to open database '/data/user/0/com.af.synapse/databases/actionValueStore'.
+12-13 11:17:28.418  3274  3274 E SQLiteDatabase:        at com.af.synapse.lib.ActionValueDatabase.getDatabase(ActionValueDatabase.java:62)
+12-13 11:17:28.418  3274  3274 E SQLiteDatabase:        at com.af.synapse.lib.ActionValueDatabase.createDataBase(ActionValueDatabase.java:48)
+12-13 11:17:28.418  3274  3274 E SQLiteDatabase:        at com.af.synapse.utils.Utils.initiateDatabase(Utils.java:127)
+12-13 11:17:28.418  3274  3274 E SQLiteDatabase:        at com.af.synapse.Synapse.onCreate(Synapse.java:52)
+12-13 11:17:28.526  3294  3294 D su      : Checking whether app [uid:10071, pkgName: com.af.synapse] is allowed to be root
+12-13 11:17:43.807  1130  1194 I ActivityManager: Waited long enough for: ServiceRecord{6ed3914 u0 com.af.synapse/.lib.BootService}
+12-13 11:18:19.258  1130  2225 I ActivityManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.af.synapse/.MainActivity (has extras)} from uid 10030 on display 0
+12-13 11:18:19.564  1130  1224 I ActivityManager: Displayed com.af.synapse/.MainActivity: +253ms
+12-13 11:18:19.643  3648  3648 D su      : Checking whether app [uid:10071, pkgName: com.af.synapse] is allowed to be root
+12-13 11:18:19.650  3649  3649 D su      : Checking whether app [uid:10071, pkgName: com.af.synapse] is allowed to be root
+12-13 11:18:19.673  3660  3660 D su      : Checking whether app [uid:10071, pkgName: com.af.synapse] is allowed to be root
+
+# AOSPA 7.0 (12/16/2016)
+# Works? Yes.
+12-16 21:34:44.517   844   844 W PackageManager: Unknown permission android.permission.ACCESS_SUPERUSER in package com.af.synapse
+12-16 21:34:45.483   844   959 W PackageManager: Unknown permission android.permission.ACCESS_SUPERUSER in package com.af.synapse
+12-16 21:34:58.709   844  1695 I ActivityManager: Start proc 2088:com.af.synapse/u0a72 for broadcast com.af.synapse/.lib.BootReceiver
+12-16 21:35:14.771   844   858 I ActivityManager: Waited long enough for: ServiceRecord{5f0799b u0 com.af.synapse/.lib.BootService}
+12-16 21:35:21.540   844   855 I ActivityManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.af.synapse/.MainActivity} from uid 10073 on display 0
+12-16 21:35:21.934   844   866 I ActivityManager: Displayed com.af.synapse/.MainActivity: +357ms
+12-16 21:35:22.125   844   866 I WindowManager: Destroying surface Surface(name=Starting com.af.synapse) called by com.android.server.wm.WindowStateAnimator.destroySurface:2014 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:881 com.android.server.wm.WindowState.destroyOrSaveSurface:2073 com.android.server.wm.AppWindowToken.destroySurfaces:363 com.android.server.wm.WindowStateAnimator.finishExit:565 com.android.server.wm.WindowStateAnimator.stepAnimationLocked:491 com.android.server.wm.WindowAnimator.updateWindowsLocked:303 com.android.server.wm.WindowAnimator.animateLocked:704
+
+# CM 12.1 (12/20/2016)
+# Works? Yes.
+I/sh      ( 1402): type=1400 audit(0.0:204): avc: denied { getattr } for path="/data/data/com.af.synapse" dev="mmcblk0p35" ino=104891 scontext=u:r:sysinit:s0 tcontext=u:object_r:app_data_file:s0 tclass=dir permissive=1
+W/PackageManager( 1471): Unknown permission android.permission.ACCESS_SUPERUSER in package com.af.synapse
+W/PackageManager( 1471): Unknown permission android.permission.ACCESS_SUPERUSER in package com.af.synapse
+I/ActivityManager( 1471): Start proc 3137:com.af.synapse/u0a61 for broadcast com.af.synapse/.lib.BootReceiver
+D/su      ( 3164): Checking whether app [uid:10061, pkgName: com.af.synapse] is allowed to be root
+D/su      ( 4376): Checking whether app [uid:10061, pkgName: com.af.synapse] is allowed to be root
+I/ActivityManager( 1471): Waited long enough for: ServiceRecord{37bc554c u0 com.af.synapse/.lib.BootService}
+I/Timeline( 2416): Timeline: Activity_launch_request id:com.af.synapse time:58980
+I/ActivityManager( 1471): START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.af.synapse/.MainActivity (has extras)} from uid 10019 on display 0
+V/WindowManager( 1471): addAppToken: AppWindowToken{20dc501 token=Token{3b774ae8 ActivityRecord{5f32c0b u0 com.af.synapse/.MainActivity t2}}} to stack=1 task=2 at 0
+V/WindowManager( 1471): Adding window Window{3afbd032 u0 Starting com.af.synapse} at 2 of 7 (after Window{30bffa36 u0 com.cyanogenmod.trebuchet/com.android.launcher3.Launcher})
+V/WindowManager( 1471): Adding window Window{2b19338a u0 com.af.synapse/com.af.synapse.MainActivity} at 2 of 8 (before Window{3afbd032 u0 Starting com.af.synapse})
+D/su      ( 4727): Checking whether app [uid:10061, pkgName: com.af.synapse] is allowed to be root
+D/su      ( 4739): Checking whether app [uid:10061, pkgName: com.af.synapse] is allowed to be root
+I/ActivityManager( 1471): Displayed com.af.synapse/.MainActivity: +278ms
+D/su      ( 4750): Checking whether app [uid:10061, pkgName: com.af.synapse] is allowed to be root
+I/Timeline( 1471): Timeline: Activity_windows_visible id: ActivityRecord{5f32c0b u0 com.af.synapse/.MainActivity t2} time:59538
+W/PackageManager( 2072): Failure retrieving resources for com.af.synapse: Resource ID #0x0
+
+# AICP 12.1 (12/20/2016)
+# Works? Yes.
+12-20 17:13:16.722   835   835 W PackageManager: Unknown permission android.permission.ACCESS_SUPERUSER in package com.af.synapse
+12-20 17:13:18.133   835  1016 W PackageManager: Unknown permission android.permission.ACCESS_SUPERUSER in package com.af.synapse
+12-20 17:13:25.694   835  1074 I ActivityManager: Start proc 2036:com.af.synapse/u0a72 for broadcast com.af.synapse/.lib.BootReceiver
+12-20 17:13:25.763  2058  2058 I com.af.synapse: type=1400 audit(0.0:52): avc: denied { execute } for name="su" dev="mmcblk0p30" ino=2252 scontext=u:r:priv_app:s0:c512,c768 tcontext=u:object_r:su_exec:s0 tclass=file permissive=1
+12-20 17:13:25.766  2058  2058 I com.af.synapse: type=1400 audit(0.0:55): avc: denied { execute_no_trans } for path="/system/xbin/su" dev="mmcblk0p30" ino=2252 scontext=u:r:priv_app:s0:c512,c768 tcontext=u:object_r:su_exec:s0 tclass=file permissive=1
+12-20 17:13:25.786  2066  2066 D su      : Checking whether app [uid:10072, pkgName: com.af.synapse] is allowed to be root
+12-20 17:13:38.214   835   854 I ActivityManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.af.synapse/.MainActivity (has extras)} from uid 10030 on display 0
+12-20 17:13:38.446   835   885 I ActivityManager: Displayed com.af.synapse/.MainActivity: +198ms
+12-20 17:13:38.463  3530  3530 D su      : Checking whether app [uid:10072, pkgName: com.af.synapse] is allowed to be root
+12-20 17:13:38.484  3541  3541 D su      : Checking whether app [uid:10072, pkgName: com.af.synapse] is allowed to be root
+12-20 17:13:38.495  3540  3540 D su      : Checking whether app [uid:10072, pkgName: com.af.synapse] is allowed to be root
+12-20 17:13:41.116   835   867 I ActivityManager: Waited long enough for: ServiceRecord{752511a u0 com.af.synapse/.lib.BootService}
+12-20 17:13:48.280   835   885 I WindowManager: Screen frozen for +175ms due to Window{c40cf98 u0 com.af.synapse/com.af.synapse.MainActivity}
+12-20 17:13:49.245  5180  5180 D su      : Checking whether app [uid:10072, pkgName: com.af.synapse] is allowed to be root

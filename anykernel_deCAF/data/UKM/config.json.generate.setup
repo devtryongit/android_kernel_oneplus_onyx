@@ -1,0 +1,118 @@
+cat << CTAG
+{
+	name:SETUP,
+	elements:[
+		{ SPane:{
+			title:"Configuration"
+		}},
+			{ SOptionList:{
+				title:"Configuration Preset",
+				description:"Choose the configuration file you want and apply it before using the next action buttons below.",
+				action:"restorebackup pickconfig",
+				default:"None",
+				values:[ "None",
+					`for BAK in \`$UKM/actions/restorebackup listconfig\`; do
+						echo "\"$BAK\","
+					done`
+				],
+				notify:[
+					{
+						on:APPLY,
+						do:[ REFRESH, APPLY ],
+						to:"generic $UKM/files/bck_prof"
+					}
+				]
+			}},
+			{ SButton:{
+				label:"Restore Configuration",
+				action:"sqlite ImportConfigSynapse",
+				notify:[
+					{
+						on:APPLY,
+						do:[ REFRESH, APPLY ],
+						to:"restorebackup pickconfig"
+					}
+				]
+			}},
+			{ SButton:{
+				label:"Delete Configuration",
+				action:"restorebackup delconfig",
+				notify:[
+					{
+						on:APPLY,
+						do:[ REFRESH, APPLY ],
+						to:"restorebackup pickconfig"
+					}
+				]
+			}},
+			`if [ -e "\`sh $DEVICE DirKernelIMG\`" ]; then
+				$BB echo '{ SPane:{
+					title:"Kernel"
+				}},
+					{ SOptionList:{
+						title:"Kernel Image",
+						description:"Choose the Kernel image you want and apply it before using the next action buttons below.",
+						action:"restorebackup pickboot",
+						default:"None",
+						values:[ "None",'
+							for IMG in \`$UKM/actions/restorebackup listboot\`; do
+								echo "\"$IMG\","
+							done
+						$BB echo ']
+					}},
+					{ SButton:{
+						label:"Restore Kernel",
+						action:"restorebackup flashboot"
+					}},
+					{ SButton:{
+						label:"Delete Kernel",
+						action:"restorebackup delboot",
+						notify:[
+							{
+								on:APPLY,
+								do:[ RESET, REFRESH ],
+								to:"restorebackup pickboot"
+							}
+						]
+					}},'
+			fi`
+		{ SPane:{
+			title:"Backup Actions"
+		}},
+			{ SGeneric:{
+				title:"Backup Name",
+				default:"None",
+				action:"generic $UKM/files/bck_prof",
+			}},
+			{ SDescription:{
+				description:"First set a name above and apply. After this you can press the chosen backup button below and then reload Synapse to update the list."
+			}},
+			{ SButton:{
+				label:"Backup Configuration",
+				action:"sqlite ExportConfigSynapse",
+				notify:[
+					{
+						on:APPLY,
+						do:[ REFRESH, APPLY ],
+						to:"generic $UKM/files/bck_prof"
+					}
+				]
+			}},
+			{ SButton:{
+				label:"Backup Kernel",
+				action:"restorebackup keepboot",
+				notify:[
+					{
+						on:APPLY,
+						do:[ REFRESH, APPLY ],
+						to:"generic '$UKM'/files/bck_prof"
+					}
+				]
+			}},
+			{ SButton:{
+				label:"Reload Synapse",
+				action:"restorebackup reload"
+			}},
+	]
+}
+CTAG

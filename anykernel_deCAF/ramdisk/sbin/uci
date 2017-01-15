@@ -1,0 +1,86 @@
+#!/system/bin/sh
+
+UKM=/data/UKM;
+BB=$UKM/busybox;
+DEVICE=`sh $UKM/device/.device.sh`;
+
+UCI_CONFIG=$UKM/config.json;
+UCI_ACTION=$UKM/actions/;
+UCI_DEVICE=$UKM/device/;
+UCI_FILES=$UKM/files/;
+
+SDK="$(grep "ro.build.version.sdk" "/system/build.prop" | cut -d '=' -f 2)";
+
+mounter () {
+	if [ "$SDK" -le "22" ]; then
+		if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
+			echo "[UCI] Mounting rootfs with busybox" | tee /dev/kmsg
+			$BB mount -o remount,rw /;
+		fi;
+		if [ "$($BB mount | grep system | grep -c ro)" -eq "1" ]; then
+			echo "[UCI] Mounting system with busybox" | tee /dev/kmsg
+			$BB mount -o remount,rw /system;
+		fi;
+	elif [ "$SDK" -ge "23" ]; then
+		if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
+			echo "[UCI] Mounting rootfs with toybox" | tee /dev/kmsg
+			mount -t rootfs -o rw,remount rootfs;
+		fi;
+		if [ "$($BB mount | grep system | grep -c ro)" -eq "1" ]; then
+			echo "[UCI] Mounting system with toybox" | tee /dev/kmsg
+			mount -t auto -o rw,remount /system;
+		fi;
+	fi;
+}
+
+unmounter () {
+	if [ "$SDK" -le "22" ]; then
+		if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c rw)" -eq "1" ]; then
+			echo "[UCI] Unmounting rootfs with busybox" | tee /dev/kmsg
+			$BB mount -o remount,ro /;
+		fi;
+		if [ "$($BB mount | grep system | grep -c rw)" -eq "1" ]; then
+			echo "[UCI] Unmounting system with busybox" | tee /dev/kmsg
+			$BB mount -o remount,ro /system;
+		fi;
+	elif [ "$SDK" -ge "23" ]; then
+		if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c rw)" -eq "1" ]; then
+			echo "[UCI] Unmounting rootfs with toybox" | tee /dev/kmsg
+			mount -t rootfs -o ro,remount rootfs;
+		fi;
+		if [ "$($BB mount | grep system | grep -c rw)" -eq "1" ]; then
+			echo "[UCI] Unmounting system with toybox" | tee /dev/kmsg
+			mount -t auto -o ro,remount /system;
+		fi;
+	fi;
+}
+
+if [ ! -f $UCI_CONFIG ]; then
+	mounter;
+	$BB chmod -R 755 $UCI_ACTION $UCI_DEVICE $UCI_FILES;
+	source $UKM/config.json.generate > $UCI_CONFIG;
+	unmounter;
+fi;
+
+case "${1}" in
+	config)
+		$BB cat $UCI_CONFIG;
+	;;
+	configpath)
+		$BB echo $UCI_CONFIG;
+	;;
+	actionpath)
+		$BB echo $UCI_ACTION;
+	;;
+	reset)
+		mounter;
+		$BB rm -f $UCI_CONFIG;
+		unmounter;
+	;;
+	mount)
+		mounter;
+	;;
+	unmount)
+		unmounter;
+	;;
+esac;

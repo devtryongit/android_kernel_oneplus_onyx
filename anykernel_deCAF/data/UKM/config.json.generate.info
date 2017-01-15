@@ -1,0 +1,137 @@
+cat << CTAG
+{
+	name:INFO,
+		elements:[
+			{ SPane:{
+				title:{
+					en:"General",
+					es:"General",
+					pt:"Geral"
+				},
+			}},
+				{ SDescription:{
+					description:"Welcome to the Universal Kernel Manager."
+				}},
+				{ SDescription:{
+					description:"This version of UKM is unique, exclusively created for Lambda Kernel."
+				}},
+				{ SDescription:{
+					description:"Created by <a href='https://github.com/GalaticStryder'>Ícaro Hoff</a>."
+				}},
+				{ SDescription:{
+					description:"Version 5.0 for L.K. Infinito"
+				}},
+				{ SDescription:{
+					description:"Check out the <a href='http://forum.xda-developers.com/lg-g2/development/kernel-lambda-kernel-t3270424'>XDA thread</a>."
+				}},
+				{ SDescription:{
+					description:"This project is accepting donations through <a href='http://forum.xda-developers.com/donatetome.php?u=6175749'>PayPal</a>."
+				}},
+				{ SPane:{
+					title:{
+						en:"Special thanks to",
+						es:"Agradecimientos especiales a",
+						pt:"Agradecimentos especiais para"
+					},
+				}},
+					{ SDescription:{
+						description:"> <a href='http://forum.xda-developers.com/member.php?u=5658634'>apb_axel</a>"
+					}},
+					{ SDescription:{
+						description:"> <a href='http://forum.xda-developers.com/member.php?u=3685904'>ak</a>"
+					}},
+					{ SDescription:{
+						description:"> <a href='http://forum.xda-developers.com/member.php?u=4167023'>AndreiLux</a>"
+					}},
+					{ SDescription:{
+						description:"> <a href='http://forum.xda-developers.com/member.php?u=4544860'>osm0sis</a>"
+					}},
+					{ SDescription:{
+						description:"> <a href='http://forum.xda-developers.com/member.php?u=3873953'>eng.stk</a>"
+					}},
+					{ SDescription:{
+						description:"> <a href='http://forum.xda-developers.com/member.php?u=2376110'>dorimanx</a>"
+					}},
+					{ SDescription:{
+						description:"> You!"
+					}},
+			{ SPane:{
+				title:{
+					en:"Device",
+					es:"Dispositivo",
+					pt:"Dispositivo"
+				},
+				description:"`getprop ro.product.model` (`getprop ro.product.device`)"
+			}},
+			{ SPane:{
+				title:{
+					en:"Android Version",
+					es:"Versión de Android",
+					pt:"Versão do Android"
+				},
+				description:"`getprop ro.build.version.release`"
+			}},
+			{ SPane:{
+				title:{
+					en:"Kernel Version",
+					es:"Versión del Núcleo",
+					pt:"Versão do Kernel"
+				},
+				description:"`$BB cat /proc/version`"
+			}},
+			{ SPane:{
+				title:{
+					en:"ROM Description",
+					es:"Descripción del ROM",
+					pt:"Descrição da ROM"
+				},
+				description:"`getprop ro.build.host | $BB awk '{print toupper($0)}'`"
+			}},
+			{ SPane:{
+				title:{
+					en:"ROM Version",
+					es:"Versión del ROM",
+					pt:"Versão da ROM"
+				},
+				description:"`MODVER=\`getprop ro.modversion\`;
+					if [ -n $MODVER ]; then
+						$BB echo $MODVER;
+					else
+						$BB echo \`getprop ro.build.version.incremental\`;
+					fi;`"
+			}},
+			{ SPane:{
+				title:{
+					en:"Build Date",
+					es:"Fecha de Compilación",
+					pt:"Data de Compilação"
+				},
+				description:"`getprop ro.build.date`"
+			}},
+			{ SPane:{
+				title:{
+					en:"Uptime",
+					es:"Tiempo de Actividad",
+					pt:"Tempo de Atividade"
+				},
+			}},
+				{ SLiveLabel:{
+					refresh:1000,
+					style:italic,
+					action:"live UpTime"
+				}},
+			{ SPane:{
+				title:{
+					en:"Installation Check",
+					es:"Comprobación de la Instalación",
+					pt:"Averiguação de Instalação"
+				},
+			}},
+				{ SLiveLabel:{
+					refresh:0,
+					style:italic,
+					action:"live InstallationCheck"
+				}},
+		]
+}
+CTAG

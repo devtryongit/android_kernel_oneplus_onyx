@@ -1,0 +1,27 @@
+UKM=/data/UKM;
+BB=$UKM/busybox;
+PROFILE=$UKM/files/survival;
+
+FILE=$1;
+FOLDER=$2;
+SYNAPSE=/system/priv-app/Synapse/Synapse.apk;
+BACKUP=$UKM/backup;
+
+if [[ ! -z $3 ]]; then
+	/sbin/uci mount;
+	case $3 in
+		0)
+			$BB rm -f $FOLDER/*$FILE;
+		;;
+		1)
+			$BB cp -pf $UKM/files/*$FILE $FOLDER/;
+			$BB cp -pf $SYNAPSE $BACKUP/Synapse.apk;
+		;;
+	esac;
+	/sbin/uci unmount;
+
+	$BB echo $3 > $PROFILE;
+	$BB echo `$BB cat $PROFILE`;
+else
+	$BB echo `$BB cat $PROFILE`;
+fi;

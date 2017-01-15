@@ -1,0 +1,72 @@
+cat << CTAG
+{
+	name:TOOLS,
+		elements:[
+			{ SPane:{
+				title:"SELinux Mode",
+				description:"Allows you to change your SELinux (Security-Enhanced Linux) status from enforcing mode to permissive mode and vice versa. NOTE: Permissive mode will allow all orders and print them in Kernel dmesg. Enforcing mode will not allow non privileged orders at all.",
+			}},
+				{ SOptionList:{
+					default:`getenforce`,
+					action:"devtools selinux",
+					values:[ Enforcing, Permissive
+					],
+				}},
+			{ SPane:{
+				title:"Databases"
+			}},
+				{ SDescription:{
+					description:"Use this button to defrag/reindex all databases found in /data & /sdcard, this increases database read/write performance. NOTE: This process can take from 1-2 minutes."
+				}},
+				{ SButton:{
+					label:"Optimize Databases",
+					action:"devtools optimizedb"
+				}},
+			{ SPane:{
+				title:"Log Creation"
+			}},
+			{ SDescription:{
+				description:"Save logcat, dmesg or last_ksmg. NOTE: A logcat is useful for app and ROM developers, at the same time dmesg and last_kmsg are useful for Kernel and ROM developers."
+			}},
+				{ SButton:{
+					label:"Save logcat",
+					action:"devtools logcat"
+				}},
+				{ SButton:{
+					label:"Save dmesg",
+					action:"devtools dmesg"
+				}},
+				{ SButton:{
+					label:"Save last_kmsg",
+					action:"devtools kmsg"
+				}},
+			{ SPane:{
+				title:"General Actions",
+				description:"To update/refresh lists, press Restart Synapse below. To clear Synapse database, press Reset Synapse, clearing the database helps to fix most issues after a Kernel upgrade or first custom Kernel installation."
+			}},
+				{ SButton:{
+					label:"Restart Synapse",
+					action:"restorebackup restart"
+				}},
+				{ SButton:{
+					label:"Reset Synapse",
+					action:"restorebackup reset"
+				}},
+			{ STitleBar:{
+				title:"Reboot"
+			}},
+				{ SButton:{
+					label:"Reboot Device",
+					action:"devtools reboot"
+				}},
+				{ SButton:{
+					label:"Reboot to Recovery",
+					action:"devtools reboot recovery"
+				}},
+				{ SButton:{
+					label:"Reboot to Download Mode",
+					action:"devtools reboot bootloader"
+				}},
+		]
+}
+CTAG
