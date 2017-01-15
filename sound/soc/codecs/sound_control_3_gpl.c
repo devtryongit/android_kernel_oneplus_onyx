@@ -35,7 +35,7 @@ int snd_pa_ctrl_locked = 1;
 #endif
 
 extern struct snd_soc_codec *fauxsound_codec_ptr;
-#ifdef CONFIG_MACH_LGE
+#ifdef CONFIG_MACH_MSM8974_15055
 static int wcd9xxx_hw_revision = 1;
 #else
 extern int wcd9xxx_hw_revision;
@@ -250,7 +250,7 @@ int snd_hax_reg_access(unsigned int reg)
 		/* Digital headphones gain */
 		case TAIKO_A_CDC_RX1_VOL_CTL_B2_CTL:
 		case TAIKO_A_CDC_RX2_VOL_CTL_B2_CTL:
-#ifndef CONFIG_MACH_LGE
+#ifndef CONFIG_MACH_MSM8974_15055
 		case TAIKO_A_CDC_RX3_VOL_CTL_B2_CTL:
 		case TAIKO_A_CDC_RX4_VOL_CTL_B2_CTL:
 		case TAIKO_A_CDC_RX5_VOL_CTL_B2_CTL:
@@ -273,7 +273,7 @@ int snd_hax_reg_access(unsigned int reg)
 				ret = 0;
 #endif
 			break;
-#ifndef CONFIG_MACH_LGE
+#ifndef CONFIG_MACH_MSM8974_15055
 		case TAIKO_A_CDC_TX1_VOL_CTL_GAIN:
 		case TAIKO_A_CDC_TX2_VOL_CTL_GAIN:
 		case TAIKO_A_CDC_TX3_VOL_CTL_GAIN:
@@ -284,7 +284,7 @@ int snd_hax_reg_access(unsigned int reg)
 		case TAIKO_A_CDC_TX6_VOL_CTL_GAIN:
 		/* Camera microphone gain */
 		case TAIKO_A_CDC_TX7_VOL_CTL_GAIN:
-#ifndef CONFIG_MACH_LGE
+#ifndef CONFIG_MACH_MSM8974_15055
 		case TAIKO_A_CDC_TX8_VOL_CTL_GAIN:
 		case TAIKO_A_CDC_TX9_VOL_CTL_GAIN:
 		case TAIKO_A_CDC_TX10_VOL_CTL_GAIN:
@@ -576,7 +576,7 @@ static ssize_t cam_mic_gain_store(struct kobject *kobj,
 static ssize_t speaker_gain_show(struct kobject *kobj,
 		struct kobj_attribute *attr, char *buf)
 {
-#ifndef CONFIG_MACH_LGE
+#ifndef CONFIG_MACH_MSM8974_15055
 	return sprintf(buf, "%u %u\n",
 		taiko_read(fauxsound_codec_ptr,
 			TAIKO_A_CDC_RX7_VOL_CTL_B2_CTL),
