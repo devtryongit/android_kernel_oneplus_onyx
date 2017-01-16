@@ -276,14 +276,14 @@ replace_string default.prop "ro.secure=0" "ro.secure=1" "ro.secure=0";
 
 # Init files
 ui_print "Modifying init files...";
-# CyanogenMod
+# LineageOS
 if [ -f init.qcom.rc ]; then
   if [ "$SDK" -ge "24" ]; then
-    ui_print "CyanogenMod 14.1 based ROM detected.";
+    ui_print "LineageOS 14.1 based ROM detected.";
   elif [ "$SDK" -eq "23" ]; then
-    ui_print "CyanogenMod 13.0 based ROM detected.";
+    ui_print "LineageOS 13.0 based ROM detected.";
   elif [ "$SDK" -eq "22" ]; then
-    ui_print "CyanogenMod 12.1 based ROM detected.";
+    ui_print "LineageOS 12.1 based ROM detected.";
   fi;
   backup_file init.qcom.rc;
   if [ -z "$(grep "zram0" init.qcom.rc)" ]; then
@@ -317,14 +317,14 @@ if [ -f fstab.qcom ]; then
     replace_line fstab.qcom "/dev/block/zram0                                    none            swap    defaults                                                                                            zramsize=533413200,zramstreams=4,notrim" "/dev/block/zram0                                    none            swap    defaults                                                                                            zramsize=536870912,zramstreams=2,notrim";
   fi;
 fi;
-# Paranoid
+# AOSP
 if [ -f init.qcom.rc ]; then
   if [ "$SDK" -ge "24" ]; then
-    ui_print "AOSPA7 based ROM detected.";
+    ui_print "AOSP Nougat based ROM detected.";
     ui_print "Overlaying the default post-boot script...";
     replace_line init.qcom.rc "service post-boot-sh /system/bin/sh /aries-post_boot.sh" "service post-boot-sh /system/bin/sh /sbin/aries-post_boot.sh";
   elif [ "$SDK" -eq "23" ]; then
-    ui_print "AOSPA6 based ROM detected.";
+    ui_print "AOSP Marshmallow based ROM detected.";
     ui_print "Injecting ZRAM support...";
     backup_file init.qcom.rc;
     insert_line init.qcom.rc "zram0" after "symlink /sdcard /storage/sdcard0" "\n    # Setup ZRAM\n    write /sys/block/zram0/comp_algorithm lz4\n    write /sys/block/zram0/max_comp_streams 2\n";
@@ -340,7 +340,7 @@ if [ -f fstab.qcom ]; then
     backup_file fstab.qcom;
     append_file fstab.qcom "zramsize" fstab.zram.patch;
   else
-    # Do nothing, ZRAM value is set to optimal 512MB on AOSPA7.
+    # Do nothing, ZRAM value is set to optimal 512MB on AOSP Nougat.
     ui_print "Detected built-in ZRAM support...";
   fi;
 fi;
