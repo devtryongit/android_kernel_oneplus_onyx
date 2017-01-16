@@ -10,7 +10,6 @@ obj-$(CONFIG_MSM_BIMC_BWMON)		+= bimc-bwmon.o
 obj-$(CONFIG_DEVFREQ_GOV_MSM_BW_HWMON)	+= governor_bw_hwmon.o
 obj-$(CONFIG_DEVFREQ_GOV_MSM_CACHE_HWMON)	+= governor_cache_hwmon.o
 obj-$(CONFIG_DEVFREQ_GOV_CONSERVATIVE)	+= governor_conservative.o
-obj-$(CONFIG_ADRENO_IDLER)		+= adreno_idler.o
 obj-$(CONFIG_SIMPLE_GPU_ALGORITHM)	+= simple_gpu_algorithm.o
 
 # DEVFREQ Drivers
