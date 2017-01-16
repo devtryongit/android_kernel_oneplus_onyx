@@ -28,8 +28,6 @@
 #include "mdss_dsi.h"
 #include "mdss_debug.h"
 
-bool state_suspended;
-
 static int mdss_dsi_regulator_init(struct platform_device *pdev)
 {
 	int rc = 0;
@@ -876,7 +874,6 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		ctrl_pdata->ctrl_state |= CTRL_STATE_MDP_ACTIVE;
 		if (ctrl_pdata->on_cmds.link_state == DSI_HS_MODE)
 			rc = mdss_dsi_unblank(pdata);
-		state_suspended = false;
 		lcd_notifier_call_chain(LCD_EVENT_ON_END, NULL);
 		break;
 	case MDSS_EVENT_BLANK:
@@ -891,7 +888,6 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		if (ctrl_pdata->off_cmds.link_state == DSI_LP_MODE)
 			rc = mdss_dsi_blank(pdata, power_state);
 		rc = mdss_dsi_off(pdata, power_state);
-		state_suspended = true;
 		lcd_notifier_call_chain(LCD_EVENT_OFF_END, NULL);                
 #ifdef CONFIG_STATE_NOTIFIER
 		if (!use_fb_notifier)
