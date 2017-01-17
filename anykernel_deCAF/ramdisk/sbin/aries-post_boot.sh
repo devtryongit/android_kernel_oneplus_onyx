@@ -219,7 +219,6 @@ echo "0" > /sys/module/kernel/parameters/initcall_debug;
 echo "0" > /sys/module/alarm_dev/parameters/debug_mask;
 echo "0" > /sys/module/binder/parameters/debug_mask;
 echo "0" > /sys/module/xt_qtaguid/parameters/debug_mask;
-echo "0" > /sys/module/lge_touch_core/parameters/debug_mask
 echo "0" > /sys/devices/fe12f000.slim/debug_mask
 echo "0" > /sys/module/smd/parameters/debug_mask
 echo "0" > /sys/module/smem/parameters/debug_mask
@@ -227,7 +226,6 @@ echo "0" > /sys/module/rpm_regulator_smd/parameters/debug_mask
 echo "0" > /sys/module/ipc_router/parameters/debug_mask
 echo "0" > /sys/module/event_timer/parameters/debug_mask
 echo "0" > /sys/module/smp2p/parameters/debug_mask
-echo "0" > /sys/module/msm_serial_hs_lge/parameters/debug_mask
 echo "0" > /sys/module/rpm_smd/parameters/debug_mask
 echo "0" > /sys/module/smd_pkt/parameters/debug_mask
 echo "0" > /sys/module/qpnp_regulator/parameters/debug_mask
