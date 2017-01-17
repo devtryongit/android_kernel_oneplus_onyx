@@ -1,0 +1,13 @@
+UKM=/data/UKM;
+BB=$UKM/busybox;
+
+case $1 in
+	enable)
+		$BB echo 1 > /proc/touchpanel/sweep_wake_enable;
+		$BB echo "Forcing S2W...";
+	;;
+	disable)
+		$BB echo 0 > /proc/touchpanel/sweep_wake_enable;
+		$BB echo "Unforcing S2W...";
+	;;
+esac;
