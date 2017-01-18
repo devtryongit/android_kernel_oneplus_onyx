@@ -193,17 +193,6 @@ echo "[Aries] Disabling USB keyboard support" | tee /dev/kmsg
 echo "0" > /sys/module/g_android/parameters/usb_keyboard
 
 ############################
-# Sound Control
-#
-sleep 0.25
-echo "[Aries] Sanitizing sound control options" | tee /dev/kmsg
-echo "1" > /sys/kernel/sound_control_3/lge_stweaks_control
-echo "254 254" > /sys/kernel/sound_control_3/lge_headphone_gain
-echo "1 1" > /sys/kernel/sound_control_3/lge_speaker_gain
-echo "4" > /sys/kernel/sound_control_3/lge_mic_gain
-echo "3" > /sys/kernel/sound_control_3/lge_cam_mic_gain
-
-############################
 # Modem SPS
 #
 sleep 0.25

@@ -30,10 +30,8 @@ cat << CTAG
 			. $UKM/config.json.generate.gamma
 			$BB echo ','
 			. $UKM/config.json.generate.memory
-			if [ -f "/sys/kernel/sound_control_3/lge_stweaks_control" ]; then
-				$BB echo ','
-				. $UKM/config.json.generate.sound
-			fi
+                        $BB echo ','
+                        . $UKM/config.json.generate.sound
 			$BB echo ','
 			. $UKM/config.json.generate.wake
 			$BB echo ','

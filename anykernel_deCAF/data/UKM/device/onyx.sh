@@ -19,7 +19,7 @@ case "$1" in
 		if [ -d /sys/class/devfreq/qcom,cpubw.42 ]; then
 			$BB echo "`$BB cat /sys/class/devfreq/qcom,cpubw.42/governor`"
 		else
-			$BB echo "`$BB cat /sys/class/devfreq/qcom,cpubw.39/governor`"
+			$BB echo "`$BB cat /sys/class/devfreq/qcom,cpubw.40/governor`"
 		fi
 	;;
 	DefaultCPUGovernor)
@@ -133,7 +133,7 @@ case "$1" in
 		if [ -d /sys/class/devfreq/qcom,cpubw.42 ]; then
 			CPUBWFREQ="$((`$BB cat /sys/class/devfreq/qcom,cpubw.42/cur_freq` / 762 * 100)) MHz";
 		else
-			CPUBWFREQ="$((`$BB cat /sys/class/devfreq/qcom,cpubw.39/cur_freq` / 762 * 100)) MHz";
+			CPUBWFREQ="$((`$BB cat /sys/class/devfreq/qcom,cpubw.40/cur_freq` / 762 * 100)) MHz";
 		fi
 		$BB echo "$CPUBWFREQ";
 	;;
@@ -151,10 +151,8 @@ case "$1" in
 		$BB echo "Core 0: $CPU0@nCore 1: $CPU1@nCore 2: $CPU2@nCore 3: $CPU3";
 	;;
 	LiveCPUTemperature)
-		CPU_C=`$BB cat /sys/class/thermal/thermal_zone7/temp`;
-		CPU_F=`$BB awk "BEGIN { print ( ($CPU_C * 1.8) + 32 ) }"`;
-
-		$BB echo "$CPU_C°C | $CPU_F°F";
+		CPU_C=`$BB cat /sys/class/thermal/thermal_zone4/temp`;
+		$BB echo "$CPU_C°C";
 	;;
 	LiveGPUFrequency)
 		GPUFREQ="$((`$BB cat /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/gpuclk` / 1000000)) MHz";
