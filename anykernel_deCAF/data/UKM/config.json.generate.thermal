@@ -17,7 +17,22 @@ cat << CTAG
 					refresh:3000,
 					style:italic,
 					action:"live CPUTemperature"
+                                }},
+			`if [ -f "/sys/module/msm_thermal/parameters/temp_threshold" ]; then
+			TEMP=\`$BB cat /sys/module/msm_thermal/parameters/temp_threshold\`
+				$BB echo '{ SPane:{
+					title:"Throttle Temperature"
 				}},
+					{ SSeekBar:{
+					description:"Throttles at defined temp to circumvent overheating.",
+					unit:"ºC",
+					step:1,
+					min:30,
+					max:70,
+					default:'$TEMP',
+					action:"generic /sys/module/msm_thermal/parameters/temp_threshold"
+				}},'
+                        fi`
 		]
 }
 CTAG
