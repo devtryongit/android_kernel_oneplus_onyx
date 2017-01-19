@@ -21,6 +21,20 @@ cat << CTAG
 						action:"serviceset mpdecision"
 					}},'
 			fi`
+                        `if [ -d "/sys/devices/system/cpu/cpuquiet" ]; then
+                                if [ -f "/sys/devices/system/cpu/cpuquiet/cpuquiet_driver/enabled" ]; then
+                                CPUQUIET=\`$BB cat /sys/devices/system/cpu/cpuquiet/cpuquiet_driver/enabled\`;
+                                $BB echo '{ SPane:{
+                                        title:"CPUQuiet"
+                                }},
+                                        { SCheckBox:{
+                                                    label:"Enable",
+                                                    description:"Enforces pluggable policies on the CPU without compromising performance.",
+                                                    default:'$CPUQUIET',
+                                                    action:"generic /sys/devices/system/cpu/cpuquiet/cpuquiet_driver/enabled"
+                                        }},'
+                                fi
+                        fi'
 			`[ -d "/sys/kernel/msm_mpdecision/conf" ] && BHC=/sys/kernel/msm_mpdecision/conf;
 			[ -d "/sys/kernel/bricked_hotplug/conf" ] && BHC=/sys/kernel/bricked_hotplug/conf;
 

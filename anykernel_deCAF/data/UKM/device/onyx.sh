@@ -27,7 +27,7 @@ case "$1" in
 	;;
 	DefaultCPUMaxFrequency)
 		while read FREQ TIME; do
-			if [ $FREQ -le "2803200" ]; then
+			if [ $FREQ -le "2956800" ]; then
 				MAXCPU=$FREQ;
 			fi;
 		done < /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state;
@@ -37,7 +37,7 @@ case "$1" in
 	DefaultCPUMinFrequency)
 		S=0;
 		while read FREQ TIME; do
-			if [ $FREQ -ge "300000" ] && [ $S -eq "0" ]; then
+			if [ $FREQ -ge "268000" ] && [ $S -eq "0" ]; then
 				S=1;
 				MINCPU=$FREQ;
 			fi;
