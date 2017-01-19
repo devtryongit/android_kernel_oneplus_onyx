@@ -10,7 +10,7 @@
 # Parameters to be configured manually
 #######################################
 
-deCAF_VERSION="Mark-I"
+deCAF_VERSION="Mark-VIII"
 
 TOOLCHAIN="/opt/toolchains/d6X/bin/arm-LG-linux-gnueabi-"
 ARCHITECTURE=arm
