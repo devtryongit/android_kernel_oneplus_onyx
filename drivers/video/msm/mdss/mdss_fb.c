@@ -542,6 +542,7 @@ static ssize_t mdss_get_rgb(struct device *dev,
 {
 	u32 copyback = 0;
 	struct mdp_pcc_cfg_data pcc_cfg;
+	struct kcal_lut_data lut_data = kcal_ext_show_values();
 
 	memset(&pcc_cfg, 0, sizeof(struct mdp_pcc_cfg_data));
 
@@ -558,25 +559,6 @@ static ssize_t mdss_get_rgb(struct device *dev,
 		pcc_g = pcc_cfg.g.g;
 		pcc_b = pcc_cfg.b.b;
 	}
-
-	return scnprintf(buf, PAGE_SIZE, "%d %d %d\n", pcc_r, pcc_g, pcc_b);
-}
-
-/**
- * simple color temperature interface using polynomial color correction
- *
- * input values are r/g/b adjustments from 0-32768 representing 0 -> 1
- *
- * example adjustment @ 3500K:
- * 1.0000 / 0.5515 / 0.2520 = 32768 / 25828 / 17347
- *
- * reference chart:
- * http://www.vendian.org/mncharity/dir3/blackbody/UnstableURLs/bbr_color.html
- */
-static ssize_t mdss_get_rgb(struct device *dev,
-	struct device_attribute *attr, char *buf)
-{
-	struct kcal_lut_data lut_data = kcal_ext_show_values();
 
 	return sprintf(buf, "%d %d %d\n", lut_data.red * 128,
 						 lut_data.green * 128,
