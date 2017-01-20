@@ -82,20 +82,18 @@ cat << CTAG
 						$BB echo '}
 					}},'
 			fi`
-                        `if [ -d "/sys/module/state_notifier/parameters" ]; then
-                                if [ -f "/sys/module/state_notifier/parameters/enabled" ]; then
-                                SN=\`$BB cat /sys/module/state_notifier/parameters/enabled\`;
-                                $BB echo '{ SPane:{
-                                        title:"State Notifier"
-                                }},
-                                        { SCheckBox:{
-                                                    label:"Enable",
-                                                    description:"Toggle between State and FB notifiers.",
-                                                    default:'$SN',
-                                                    action:"generic /sys/module/state_notifier/parameters/enabled"
-                                        }},'
-                                fi
-                        fi'			
+			`if [ -f "/sys/module/state_notifier/parameters" ]; then
+			SN=\`$BB cat /sys/module/state_notifier/parameters/enabled\`
+				$BB echo '{ SPane:{
+					title:"State Notifier"
+				}},
+					{ SCheckBox:{
+						label:"Enable",
+						description:"Toggle between State and FB notifiers.",
+						default:'$SN',
+						action:"generic /sys/module/state_notifier/parameters/enabled"
+					}},'
+			fi`		
 			`if [ -f "/sys/module/sps_bam/parameters/allow_suspend" ]; then
 			MODEM_SLEEP=\`$BB cat /sys/module/sps_bam/parameters/allow_suspend\`
 				$BB echo '{ SPane:{

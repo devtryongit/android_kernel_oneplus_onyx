@@ -26,52 +26,10 @@ cat << CTAG
 					refresh:5000,
 					action:"live ZRAMStatus"
 				}},
-			`if [ -f "/sys/block/zram0/disksize" ]; then
-			ZRAM=\`$BB cat /sys/block/zram0/disksize\`;
-			ZRAM=$((ZRAM / 1024 / 1024));
-			$BB echo '{ SPane:{
-				title:"Z-RAM",
-				description:"Z-RAM takes real device RAM and compresses it by 35-40% to create more free RAM using the LZ4 compressor. The more RAM is allocated to Z-RAM, the more physical RAM is freed at the cost of CPU usage."
-			}},
-				{ SSeekBar:{
-					title:"Size",
-					description:"Adjust size of the Z-RAM block at runtime. This will also set the maximum number of compression streams accordingly. NOTE: Setting the value to zero will turn off Z-RAM.",
-					unit:" MB",
-					step:256,
-					min:0,
-					max:1024,
-					default:'$ZRAM',
-					action:"zram /sys/block/zram0/disksize"
-				}},'
-			fi`
-			{ SPane:{
-				title:"Swap File",
-				description:"A swap file resides in the /data partition and can be used to extend the memory under some circumstances. Enable this only if you have available space in /data partition and if you really do need that RAM expansion. NOTE: Setting the value to zero will turn off the swap file and remote it."
-			}},
-				{ SSeekBar:{
-					title:"File Size",
-					description:"Adjust the size of the swap file at runtime. This file will be located at /data/swapfile. This can take up to two minutes, do not close the app.",
-					unit:" MB",
-					step:256,
-					min:0,
-					max:512,
-					default:0,
-					action:"swapfile /data/swapfile"
-				}},
 			{ SPane:{
 				title:"Virtual Memory",
 				description:"Tune the operation of the VM subsystem of the Linux kernel."
 			}},
-				{ SSeekBar:{
-					title:"Swappiness",
-					description:"Controls the tendency to move processes out of physical memory to the swap space and/or to the virtual compressed RAM (Z-RAM).",
-					unit:"%",
-					step:5,
-					min:30,
-					max:95,
-					default:`$BB cat /proc/sys/vm/swappiness`,
-					action:"generic /proc/sys/vm/swappiness"
-				}},
 				{ SSeekBar:{
 					title:"Dirty Background Ratio",
 					description:"Contains, as a % of total system memory, the number of pages at which the pdflush background writeback daemon will start writing out dirty data.",
