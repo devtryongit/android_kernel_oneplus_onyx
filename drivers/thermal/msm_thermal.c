@@ -92,6 +92,7 @@ static int msm_thermal_cpufreq_callback(struct notifier_block *nfb,
 
 static struct notifier_block msm_thermal_cpufreq_notifier = {
 	.notifier_call = msm_thermal_cpufreq_callback,
+	.priority = INT_MAX,
 };
 
 static void limit_cpu_freqs(uint32_t max_freq)
