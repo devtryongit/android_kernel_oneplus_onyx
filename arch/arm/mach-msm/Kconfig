@@ -1900,7 +1900,7 @@ config MSM_DEVFREQ_CPUBW
 
 config FORCE_FAST_CHARGE
 	bool "Force faster charge rate for USB"
-	default y
+	default n
 	help
 	  This allows users to override default charge rate up to 900mA on USB
 
@@ -2894,6 +2894,18 @@ config BLU_PLUG
 	help
 	  The Dynamic hotplug driver automatically online/offline CPUs proportional to system load.
 
+config MSM_HOTPLUG
+	bool "Advanced hotplug solution"
+	default n
+	help
+	  Allows for high performance.
+
+config MAKO_HOTPLUG
+	bool "Conservative hotplug solution"
+	default n
+	help
+          Disperses load among two cores after unplug limit.
+
 config MSM_CPR
 	tristate "Use MSM CPR in S/W mode"
 	help
@@ -3078,25 +3090,25 @@ config HAS_MACH_MEMUTILS
 
 config MSM_CPU_VOLTAGE_CONTROL
 	bool "Userspace CPU Voltage Control"
-	default y
+	default n
 	help
 	  This enables userspace CPU Voltage Control.
 
 config CHARGE_LEVEL
 	bool "Charge level interface"
-	default y
+	default n
 	help
 	  Allows configuration of ac and usb charging levels	
 	 
 config PVS_LEVEL_INTERFACE
 	bool "Expose PVS level information in sysfs"
-	default y
+	default n
 	help
 	 Allow PVS level to be shown in kernel tuning apps
 
 config MSM_LIMITER
 	bool "MSM Frequency Limiter Driver"
-	default y
+	default n
 	help
 	  The MSM Frequency Limiter Driver controls max frequency limit for each CPU
 	  to desired value on suspend/resume
