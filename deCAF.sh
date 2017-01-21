@@ -12,7 +12,7 @@
 
 deCAF_VERSION="Mark-IX"
 
-TOOLCHAIN="/opt/toolchains/d6X/bin/arm-LG-linux-gnueabi-"
+TOOLCHAIN="/opt/toolchains/u6X/bin/arm-eabi-"
 ARCHITECTURE=arm
 COMPILER_FLAGS_KERNEL=""
 COMPILER_FLAGS_MODULE=""
