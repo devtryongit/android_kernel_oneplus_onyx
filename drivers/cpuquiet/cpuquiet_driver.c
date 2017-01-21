@@ -533,10 +533,16 @@ int __init cpq_auto_hotplug_init(void)
 	if (err)
 		goto error;
 
-	
+
+#ifdef CONFIG_CPUQUIET_FRAMEWORK_DEFAULT
 	enabled = true;
 	// disable mpdecision load calc - just burning cpu cycles
 	enable_rq_load_calc(false);
+#else
+	enabled = false;
+	// disable mpdecision load calc - just burning cpu cycles
+	enable_rq_load_calc(true);
+#endif
 
 	return err;
 	
