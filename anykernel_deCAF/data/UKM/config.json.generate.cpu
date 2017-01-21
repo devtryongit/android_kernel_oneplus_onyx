@@ -136,13 +136,13 @@ cat << CTAG
 								action:"generic /sys/kernel/msm_limiter/limiter_enabled"
 							}},'
 					fi
-					if [ -f "/sys/kernel/msm_limiter/parameters/debug_mask" ]; then
-					DEBUG=\`cat /sys/kernel/msm_limiter/parameters/debug_mask\`
+					if [ -f "/sys/kernel/msm_limiter/debug_mask" ]; then
+					DEBUG=\`cat /sys/kernel/msm_limiter/debug_mask\`
 						echo '{ SCheckBox:{
 								label:"Debug Mask",
 								description:"Allows you to activate debug mask for MSM Limiter operations.",
 								default:'$DEBUG',
-								action:"generic /sys/kernel/msm_limiter/parameters/debug_mask"
+								action:"generic /sys/kernel/msm_limiter/debug_mask"
 						}},'
 					fi
 					if [ -f "/sys/kernel/msm_limiter/suspend_min_freq" ]; then

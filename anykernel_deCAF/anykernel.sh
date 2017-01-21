@@ -303,7 +303,7 @@ if [ -f init.qcom.rc ]; then
     ui_print "Detected built-in swap support, skipping...";
   fi;
   ui_print "Injecting post-boot script support...";
-  append_file init.qcom.rc "aries-post_boot" init.script.patch;
+  append_file init.qcom.rc "rudolph-post_boot" init.script.patch;
 fi;
 if [ -f fstab.qcom ]; then
   backup_file fstab.qcom;
@@ -313,7 +313,7 @@ if [ -f fstab.qcom ]; then
     append_file fstab.qcom "zramsize" fstab.zram.patch;
   else
     # Set the proper values for ZRAM if available.
-    ui_print "Patching built-in ZRAM fstab for Aries Kernel...";
+    ui_print "Patching built-in ZRAM fstab for Rudolph Kernel...";
     replace_line fstab.qcom "/dev/block/zram0                                    none            swap    defaults                                                                                            zramsize=533413200,zramstreams=4,notrim" "/dev/block/zram0                                    none            swap    defaults                                                                                            zramsize=536870912,zramstreams=2,notrim";
   fi;
 fi;
@@ -322,7 +322,7 @@ if [ -f init.qcom.rc ]; then
   if [ "$SDK" -ge "24" ]; then
     ui_print "AOSP Nougat based ROM detected.";
     ui_print "Overlaying the default post-boot script...";
-    replace_line init.qcom.rc "service post-boot-sh /system/bin/sh /aries-post_boot.sh" "service post-boot-sh /system/bin/sh /sbin/aries-post_boot.sh";
+    replace_line init.qcom.rc "service post-boot-sh /system/bin/sh /rudolph-post_boot.sh" "service post-boot-sh /system/bin/sh /sbin/rudolph-post_boot.sh";
   elif [ "$SDK" -eq "23" ]; then
     ui_print "AOSP Marshmallow based ROM detected.";
     ui_print "Injecting ZRAM support...";
@@ -330,7 +330,7 @@ if [ -f init.qcom.rc ]; then
     insert_line init.qcom.rc "zram0" after "symlink /sdcard /storage/sdcard0" "\n    # Setup ZRAM\n    write /sys/block/zram0/comp_algorithm lz4\n    write /sys/block/zram0/max_comp_streams 2\n";
     insert_line init.qcom.rc "swapon_all" after "mount_all ./fstab.qcom" "    swapon_all ./fstab.qcom";
     ui_print "Injecting post-boot script support...";
-    append_file init.qcom.rc "aries-post_boot" init.script.patch;
+    append_file init.qcom.rc "rudolph-post_boot" init.script.patch;
   fi;
 fi;
 if [ -f fstab.qcom ]; then
@@ -361,6 +361,12 @@ if [ -f ueventd.rc ]; then
   backup_file ueventd.rc;
   insert_line ueventd.rc "frandom" after "/dev/urandom              0666   root       root" "/dev/frandom              0666   root       root\n/dev/erandom              0666   root       root"
 fi;
+
+# remove mpdecsion binary
+mv $bindir/mpdecision $bindir/mpdecision-rm
+
+# remove qcom thermal engine
+mv /system/etc/thermal-engine-8974.conf /system/etc/thermal-engine-8974-rm
 
 # xPrivacy
 # Thanks to @Shadowghoster & @laufersteppenwolf

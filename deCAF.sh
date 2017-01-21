@@ -4,13 +4,13 @@
 #
 # Version 1.3, 11.10.2016
 #
-# (C) Zippy Parmesian (aka certifiedblyndguy)
+# (C) CertifiedBlyndGuy (aka RJ)
 
 #######################################
 # Parameters to be configured manually
 #######################################
 
-deCAF_VERSION="Mark-IX"
+deCAF_VERSION="Mark-"
 
 TOOLCHAIN="/opt/toolchains/u6X/bin/arm-eabi-"
 ARCHITECTURE=arm
@@ -26,7 +26,7 @@ OUTPUT_FOLDER=""
 
 DEFCONFIG="onyx_defconfig"
 DEFCONFIG_VARIANT=""
-KERNEL_NAME="Aries"
+KERNEL_NAME="Rudolph"
 
 FINISH_MAIL_TO=""
 
@@ -74,7 +74,7 @@ if [ -f ~/x-settings.sh ]; then
 	. ~/x-settings.sh
 fi
 
-deCAF_FILENAME="Aries-$deCAF_VERSION"
+deCAF_FILENAME="Rudolph-$deCAF_VERSION"
 
 # set environment
 export ARCH=$ARCHITECTURE
@@ -99,7 +99,7 @@ step0_copy_code()
 
 	# Replace version information in mkcompile_h with the one from x-settings.sh
 	sed "s/\`echo \$LINUX_COMPILE_BY | \$UTS_TRUNCATE\`/$KERNEL_NAME-$deCAF_VERSION-$deCAF_DATE/g" -i $BUILD_PATH/scripts/mkcompile_h
-	sed "s/\`echo \$LINUX_COMPILE_HOST | \$UTS_TRUNCATE\`/certifiedblyndguy/g" -i $BUILD_PATH/scripts/mkcompile_h
+	sed "s/\`echo \$LINUX_COMPILE_HOST | \$UTS_TRUNCATE\`/RJ/g" -i $BUILD_PATH/scripts/mkcompile_h
 }
 
 step1_make_clean()
@@ -245,7 +245,7 @@ step4_prepare_anykernel()
 	cd $REPACK_PATH
 	KERNELNAME="Flashing $KERNEL_NAME $deCAF_VERSION"
 	sed -i "s;###kernelname###;${KERNELNAME};" META-INF/com/google/android/update-binary;
-	COPYRIGHT="(c) Lord deCAF (aka certifiedblyndguy), $(date +%Y.%m.%d-%H:%M:%S)"
+	COPYRIGHT="(c) Lord deCAF (aka RJ), $(date +%Y.%m.%d-%H:%M:%S)"
 	sed -i "s;###copyright###;${COPYRIGHT};" META-INF/com/google/android/update-binary;
 }
 
