@@ -10,7 +10,7 @@
 # Parameters to be configured manually
 #######################################
 
-deCAF_VERSION="Mark-"
+deCAF_VERSION="Mark-I"
 
 TOOLCHAIN="/opt/toolchains/u6X/bin/arm-eabi-"
 ARCHITECTURE=arm
